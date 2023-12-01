@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <script>
+    $(document).ready(function () {
+        let ticketCount = 0;
+        let maxTicket = 2; //set dari halaman beli tiket
+        let initialPrice = 35000; //set dari database
+        let movieDate = new Date("10 11 2022"); //set dari database
+        let selectedSeats = [];
+        let movieTitle = "Spiderman";//ambil dari database
+
+
+        let table = document.getElementById("seatTable"); //kupanggil table nya
+        let data = table.getElementsByTagName('td'); //set kursi supaya ga satu2
+        $(".jumlahTiket").html(ticketCount);
+        $("#maxTicket").html(maxTicket)
+        $(".title").html(movieTitle);
+        $(".tanggalTayang").html(movieDate.getMonth()+1 + " " + movieDate.getDate() +"," + movieDate.getFullYear());
+        for (let i = 0; i < data.length; i++) {
+            data[i].addEventListener('click', function () {
+                if($(data[i]).hasClass("disabled-seat")){
+                    disable();
+                }/*if already sold td disabled*/
+                if ($(data[i]).hasClass("selected-seat")) {
+                    ticketCount--;
+                    $(".jumlahTiket").html(ticketCount);
+                    $(data[i]).removeClass("selected-seat");
+                    selectedSeats.splice(selectedSeats.indexOf(data[i].id), 1);
+                } else {
+                    if (ticketCount < maxTicket) {
+                        ticketCount++;
+                        $(".jumlahTiket").html(ticketCount);
+                        $(data[i]).addClass("selected-seat");
+                        selectedSeats.push(data[i].id);
+                    }
+                }
+                price = ticketCount * initialPrice;
+                $(".hargaTiket").html(price);
+                $("#selectedSeat").html(selectedSeats.join(", "));
+            });
+        }
+        $("#confirmSeat").click(function (e) {
+            e.preventDefault();
+            if(ticketCount < maxTicket) {
+                $("#warningToast").show();
+            }else{
+                $("#confirmModal").fadeIn("slow", function(){
+                    $("#confirmModal").show();
+                });
+            }
+            
+        });
+        $(".modalCloseButton").click(function (e) {
+            $("#confirmModal").fadeOut("slow", function() {
+                $(this).hide();
+            });
+        });
+        $("#toastCloseButton").click(function(){
+            $("#warningToast").hide();
+        });
+        $(".strongConfirmButton").click(function() {
+            for (let i = 0; i < data.length; i++) {
+                if($(data[i]).hasClass("selected-seat")) {
+                    $(data[i]).removeClass("selected-seat");
+                    $(data[i]).addClass("disabled-seat");
+                }
+            }
+            $("#confirmModal").hide();
+            ticketCount = 0;//direset ke 0
+            $(".jumlahTiket").html(ticketCount); //diset ke posisi awal
+            price = ticketCount * initialPrice;
+            $(".hargaTiket").html(price); //diset ke posisi awal
+
+            selectedSeats.splice(0, selectedSeats.length); // kosongkan array
+            $("#selectedSeat").html(""); //dihilangkan tulisan yang ada dimodal
+            
+        });
+    });
+    </script>
+    <style>
+        body::before
+        {
+            content: '';
+            position: absolute;
+            z-index:-1;
+            width: 100%;
+            height: 100%;
+            background-image: url("https://th.bing.com/th/id/OIG.fdZXYBIfHm2gCahikLC2?w=1024&h=1024&rs=1&pid=ImgDetMain");
+            filter: opacity(50%);
+        }
+        .modal::before{
+            content: '';
+            position: absolute;
+            width: 100%;
+            height : 100%;
+            background-color: black;
+            filter:opacity(60%);
+            
+        }
+
+        /* @keyframes animate 
+        {
+            0%
+            {
+                transform: translateY(-100%); 
+            }
+            100%
+            {
+                transform: translateY(100%);
+            }
+        } */
+         @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+        .selected-seat {
+            background-color: rgb(244, 255, 158) !important;
+            color: black !important;
+        } 
+        .disabled-seat{
+            background-color:rgb(224,95,86) !important;
+            color:white;
+        }
+        /* berfungsi sebagai toogle */
+        *{
+            font-family: 'Quicksand', sans-serif;
+        }
+        .onPage::first-letter{
+            font-size: 50px !important;
+        }
+        section{
+            height: 85vh;
+            overflow-y: auto;
+        }
+        @media (max-width: 768px) {
+            #legend table {
+                display:none !important;
+            }
+        }
+        .modal-content::before {
+            background-image: url(https://th.bing.com/th/id/OIP.G-2Q6Qo4uqjpTCd07OXTYgHaK-?rs=1&pid=ImgDetMain);
+            content: '';
+            position: absolute;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+            filter: blur(5px); /* Adjust the blur value as needed */
+            
+        }
+        .modal-content {
+            position: relative;
+            z-index: 1;
+            text-shadow:2px 2px 8px #000000;
+            font-weight:bold;
+        }
+        .seatA td{
+            background-color:rgb(26, 195, 86);
+            color:white;
+            border-width: 8.5px;
+        }
+        .seatB td{
+            background-color:rgb(26, 195, 86);
+            color:white;
+            border-width: 8.5px; 
+        }
+        .seatC td{
+            background-color:rgb(26, 195, 86);
+            color:white;
+            border-width: 8.5px; 
+        }
+        nav{
+            background-color: rgb(10, 99, 140);
+        }
+    </style>
+</head>
+<body style="background-color:black">
+    <div id ="confirmModal" class="modal" tabindex="-1" style="color:white;">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title fs-5">Please check your ticket order</h5>
+              <button type="button" class="modalCloseButton close border-0" style="background:none; color:white" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body d-flex justify-content-center text-center align-content-center row" style="color:white">
+              <h1><span class="title"></span></h1>
+              <img src ="https://th.bing.com/th/id/OIP.G-2Q6Qo4uqjpTCd07OXTYgHaK-?rs=1&pid=ImgDetMain" style="width : 10rem;" class="img-thumbnail" style="display: block;">
+              <h5 style="margin-top:20px;">Checkout Details</h5>
+              <p>Date : <span class="tanggalTayang"></span></p>
+              <p>Selected Seat : <span id="selectedSeat"></span></p>
+              <p>Ticket Amount : <span class="jumlahTiket"></span></p>
+              <p>Total : <span class="hargaTiket"></span></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="modalCloseButton btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="strongConfirmButton btn btn-primary">Confirm</button>
+            </div>
+          </div>
+        </div>
+      </div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="warningToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <img src="https://flyclipart.com/thumb2/small-warning-icon-icons-png-460175.png" class="rounded me-2" alt="..." style="width:1rem;">
+      <strong class="me-auto">Warning</strong>
+      <small>Just now</small>
+      <button id="toastCloseButton" type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      Please select more seat!
+    </div>
+  </div>
+</div>
+    <nav class="navbar sticky-top">
+        <div class="navbar-brand" style="padding-left: 10px; color:white"><strong>PCinemaU</strong></div>
+            <form style="padding-right: 10px;">
+                <button class="btn btn-outline-danger" type="Cancel" style="color:rgb(244, 205, 205)">Cancel</button>
+            </form>
+    </nav>
+    <section>
+    <div class="container-fluid" style="border-radius: 50px; background-color:black; color :rgb(255, 255, 255); padding:30px; margin-top:20px;">
+        <h1 class="onPage"><strong><span class="title"></span></strong></h1>
+        <h4><span class="namaTheater"><strong>Nama Studio</strong></span> - <span><strong>Studio 2</strong></span></h4>
+        <strong>Date :</strong> <span class="tanggalTayang">12-10-2023</span> | <strong>Time :</strong> <span class="waktuTayang">19.00</span> <br>
+        <strong>Tickets :</strong> <span class="jumlahTiket"></span>/<span id="maxTicket"></span>, <strong>Total :</strong> Rp. <span class="hargaTiket"></span> <br> 
+        <hr>   
+    </div>
+    <div id="legend" class="container-fluid " style="margin-top:20px;">
+        <table class="table table-bordered d-flex justify-content-center" style="border-color:black">
+            <tr>
+                <td style="background-color:rgb(26, 195, 86); color:white;">XX</td>
+                <td style="background-color:black; color:white;">Available</td>
+                <td style="background-color:rgb(244, 255, 158);">XX</td>
+                <td style="background-color:black; color:white;">Your Seat</td>
+                <td style="background-color:rgb(224,95,86); color:white">XX</td>
+                <td style="background-color:black; color:white;">Sold</td>
+            </tr>
+        </table>
+    </div>
+    <div class="table-responsive d-flex justify-content-center" style="margin-top: 90px;">
+        <table id="seatTable" class="table table-bordered table-hover d-flex justify-content-center" style="border-color:black;">
+            <tr>
+                <th colspan="9" class="text-center" style="background-color: rgb(40, 135, 40); color:white; border-width:8.5px;">Screen Area </th>
+            </tr>
+            <tr style="border-width: 8.5px;">
+                <th colspan="6" style="background-color: rgb(216, 215, 215);border-style:none;"> </th>
+                <th rowspan="5" style="background-color: rgb(216, 215, 215);border-style:none;"> </th>
+                <th colspan ="2" class="text-center" style="background-color:rgb(224, 95, 86); border-width:8.5px; color:white;">DOOR</th>            </tr>
+            <tr class="seatA">
+                <td id ="A1">A1</td>
+                <td id ="A2">A2</td>
+                <td id ="A3">A3</td>
+                <td id ="A4">A4</td>
+                <td id ="A5">A5</td>
+                <td id ="A6">A6</td>
+                <td id ="A7">A7</td>
+            </tr>
+            <tr class="seatB">
+                <td id ="B1">B1</td>
+                <td id ="B2">B2</td>
+                <td id ="B3">B3</td>
+                <td id ="B4">B4</td>
+                <td id ="B5">B5</td> 
+                <td id ="B6">B6</td>
+                <td id ="B7">B7</td>
+            </tr>
+            <tr class="seatC">
+                <td id ="C1">C1</td>
+                <td id ="C2">C2</td>
+                <td id ="C3">C3</td>
+                <td id ="C4">C4</td> 
+                <td id ="C5">C5</td>
+                <td id ="C6">C6</td>
+                <td id ="C7">C7</td>
+            </tr>
+            <tr class="seatB">
+                <td id ="D1">D1</td>
+                <td id ="D2">D2</td>
+                <td id ="D3">D3</td>
+                <td id ="D4">D4</td>
+                <td id ="D5">D5</td>
+                <td id ="D6">D6</td>
+                <td id ="D7">D7</td>
+                <td id ="D8">D8</td>
+            </tr>
+        </table>
+    </div>
+    <nav class="navbar fixed-bottom">
+        <div class="container-fluid d-flex justify-content-center">
+            <form>
+                <button id="confirmSeat" class="btn btn-outline-success" type="Success" style="color:rgb(183, 248, 183)" data-toggle="modal" data-target="#confirmModal" >Confirm Seat Placement</button>
+            </form>
+        </div>
+    </nav>
+</body>
+</html>
