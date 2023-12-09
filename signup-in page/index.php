@@ -4,13 +4,13 @@ session_start();
 $guessUser = false;
 if (isset($_SESSION["login"])) {
     $mysqli = require __DIR__ . "/database.php";
-    $data = $_SESSION["user_data"];
-    $user_id = $data["customer_id"];
+    $data = $_SESSION["username"];
 
-    $sql = "SELECT * FROM customer WHERE customer_id = '$user_id'";
+    $sql = "SELECT * FROM customer WHERE username = '$data'";
 
     $result = $mysqli->query($sql);
     $user = $result->fetch_assoc();
+    
     $guessUser = false;
 } else {
     $guessUser = true;

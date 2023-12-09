@@ -3,6 +3,18 @@
 session_start();
 //SEMUA PAGE YANG ADA SETELAH SIGN IN PERLU PAKAI INI DIATAS TIAP CODINGAN
 
+// cek cookie
+if (isset($_COOKIE["login"])){
+    if($_COOKIE["login"] == true) {
+        $_SESSION["login"] = true;
+        $_SESSION["username"] = $_COOKIE["username"];
+        header("Location: ../signup-in page/index.php");
+        exit;
+    
+    }
+}
+
+
 if (isset($_SESSION["login"])) {
     header("Location: index.php");
     exit;
@@ -15,6 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // cek apakah tombol login sudah ditekan
     if (isset($_POST["login"])) {
+
+        
         $userName = strtolower(trim($_POST["username"]));
         $password = $_POST["password"];
 
@@ -38,8 +52,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 // session_regenerate_id();
 
-                $_SESSION["user_data"] = $user;
+                $_SESSION["username"] = $user["username"];
                 $_SESSION["login"] = true;
+
+                //cek apakah remeber me dicentang
+                if (isset($_POST["cookie"])) {
+                    setcookie("login", true, time()+60);
+                    setcookie("username", $user["username"], time()+60);
+                } 
 
                 header("Location: ../signup-in page/index.php");
                 exit;
@@ -118,7 +138,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <i>Password</i>
                     </div>
                     <div class="links">
-                        <a href="#">Forgot Password</a>
+                        <div>
+                        <input type="checkbox" name="cookie" id="myCookie">
+                        <label for="myCookie" style="color:  rgb(0, 183, 255); padding-left: 10px;">Remember Me</label>
+                        
+                        </div>
+                        
                         <!-- <a href="pcucinemasignuppage.html">Signup</a> -->
                         <a href="signup-page.php">Sign-Up</a> <!--iki nama signup ku-->
                     </div>
