@@ -3,11 +3,19 @@
 session_start();
 //SEMUA PAGE YANG ADA SETELAH SIGN IN PERLU PAKAI INI DIATAS TIAP CODINGAN
 
+require __DIR__ . "/database.php";
 // cek cookie
-if (isset($_COOKIE["login"])){
-    if($_COOKIE["login"] == true) {
-        $_SESSION["login"] = true;
-        $_SESSION["username"] = $_COOKIE["username"];
+if (isset($_COOKIE["id"]) && isset($_COOKIE["key"])){
+    $id = $_COOKIE["id"];
+    $key = $_COOKIE["key"];
+    $sql = "SELECT * FROM customer WHERE id = '$id'";
+    $result = $mysqli_query($mysqli, $sql);
+    $row = mysqli_fetch_assoc($result);
+
+    
+    if($_COOKIE["key"] == hash("sha256", $row["username"])) {
+        $_SESSION["id"] = $id;
+        $_SESSION["username"] = $row["username"];
         header("Location: ../signup-in page/index.php");
         exit;
     
@@ -23,7 +31,6 @@ if (isset($_SESSION["login"])) {
 $isInvalid = false;
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $mysqli = require __DIR__ . "/database.php";
 
     // cek apakah tombol login sudah ditekan
     if (isset($_POST["login"])) {
@@ -55,10 +62,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $_SESSION["username"] = $user["username"];
                 $_SESSION["login"] = true;
 
-                //cek apakah remeber me dicentang
+                //cek apakah remember me dicentang
                 if (isset($_POST["cookie"])) {
-                    setcookie("login", true, time()+60);
-                    setcookie("username", $user["username"], time()+60);
+                    setcookie("id", $user["customer_id"], time()+60);
+                    setcookie("key", hash("sha256", $user["username"]), time()+60);
                 } 
 
                 header("Location: ../signup-in page/index.php");

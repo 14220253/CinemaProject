@@ -48,7 +48,7 @@ if (!validatePhoneNumber($_POST["phone_number"]) && !empty($_POST["phone_number"
 }
 
 if (empty($errors)) {
-    $mysqli = require __DIR__."/database.php";
+    require __DIR__."/database.php";
     $name = validData($_POST["name"]);
     $address = validData($_POST["address"]);
     $phone_number = validData($_POST["phone_number"]);

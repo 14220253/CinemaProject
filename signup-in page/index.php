@@ -1,9 +1,10 @@
 <?php
 //FILE PHP INI SEBAGAI PLACEHOLDER UNTUK HOMEPAGE
 session_start();
+require __DIR__ . "/database.php";
 $guessUser = false;
 if (isset($_SESSION["login"])) {
-    $mysqli = require __DIR__ . "/database.php";
+    
     $data = $_SESSION["username"];
 
     $sql = "SELECT * FROM customer WHERE username = '$data'";

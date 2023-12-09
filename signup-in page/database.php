@@ -48,8 +48,4 @@ function insertData ($data) {
 
 }
 
-
-
-return $mysqli;
-
 ?>
