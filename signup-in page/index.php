@@ -264,7 +264,7 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
             </div>
 
             <!-- //now playing section -->
-            <h1 class="mt-5" id="nowplaying" data-aos="flip-right" data-aos-duration="1000">NOW PLAYING</h1>
+            <h1 class="mt-5" id="nowplaying" data-aos="flip-right" data-aos-duration="2000">NOW PLAYING</h1>
             <hr class="mb-5 bg-warning">
 
 
@@ -275,7 +275,7 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
 
                         <!-- <div class="card">
                     <div ></div> -->
-                        <div class="card movie-card" data-aos="zoom-in-up" data-aos-delay="300" data-aos-duration="800">
+                        <div class="card movie-card" data-aos="zoom-in-up" data-aos-delay="300" data-aos-duration="1000">
                             <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"]?>" class="text-decoration-none text-dark" >
                                 <img class="card-img-top" src="data:image;base64,<?php getMovie($movie["movie_id"]) ?>" alt="<?= $movie["movie_name"] ?>">
                             </a>
@@ -294,13 +294,13 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
             </div>
 
             <!-- //upcoming -->
-            <h1 class="mt-5 mb-5" id="upcoming" data-aos="flip-right" data-aos-duration="1000">UPCOMING MOVIE</h1>
+            <h1 class="mt-5 mb-5" id="upcoming" data-aos="flip-right" data-aos-duration="2000">UPCOMING MOVIE</h1>
             <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 g-2 mb-5">
                 <div class="col"></div>
             </div>
 
 
-            <h1 class="mt-5 mb-5" id="theatre" data-aos="flip-right" data-aos-duration="1000">Theatre</h1>
+            <h1 class="mt-5 mb-5" id="theatre" data-aos="flip-right" data-aos-duration="2000">Theatre</h1>
 
         </div>
 

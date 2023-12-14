@@ -23,6 +23,9 @@ if (isset($_GET["movie_id"])) {
     $sql = "SELECT * FROM movie WHERE movie_id = $movie_id";
     $result = $mysqli->query($sql);
     $movies = $result->fetch_assoc();
+    $supplierID = $movies["fk_supplier_id"];
+
+    $produser = query("SELECT * FROM movie_supplier WHERE supplier_id = $supplierID");
 } else {
     header("Location: index.php");
     exit;
@@ -85,63 +88,30 @@ if (isset($_GET["movie_id"])) {
     <link rel="stylesheet" href="../Partials/general.css" />
     <!-- AOS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+        
 
         * {
             font-family: "Quicksand", sans-serif;
         }
 
-        /* .title {
-            align-self: center;
-            font-weight: bolder;
-            margin: auto;
-            font-size: xx-large;
+
+
+
+        label::before {
+            content: ":";
+            position: absolute;
+            top: 0;
+            right: 5px;
         }
 
-        .poster {
-            width: 280px;
-            height: 420px;
-            margin-top: 40px;
-            margin-left: 15px;
-            margin-right: 20px;
-            margin-bottom: 50px;
-            float: left;
+        .label {
+            width: 90px;
         }
-
-        .posterTitle {
-            align-self: center;
-            font-size: large;
-            color: white;
-            text-align: center;
-        }
-
-        p {
-            font-family: "Quicksand", sans-serif;
-            color: white;
-        }
-
-        ul.no-bullets {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        li {
-            color: white;
-        }
-
-        li.title {
-            color: white;
-            font-size: xx-large;
-            font-weight: bolder;
-        }
-
-        .tab {
-            display: inline-block;
-            margin-left: 40px;
-        } */
     </style>
 </head>
 
@@ -213,10 +183,10 @@ if (isset($_GET["movie_id"])) {
         </nav>
 
         <div class="container-fluid p-2 p-lg-5 p-md-5 p-sm-3">
-            <h1 class="text-center text-dark pt-4 pb-4">NOW PLAYING</h1>
+            <h1 class="h1 text-center text-light pt-4 pb-4" style="font-size: 3em; font-weight: bolder; font-family: 'League Spartan';">NOW PLAYING</h1>
 
-            <div class="row row-cols-2">
-                <div class="col-sm-4 col-12 col-md-5 col-lg-3 g-0 order-lg-1 order-2 pb-4">
+            <div class="row">
+                <div class="col-sm-5 col-12 col-md-5 col-lg-3 g-0 order-lg-1 order-2 pb-4">
                     <div class="poster p-sm-2 p-2 p-md-0 p-lg-0">
                         <a href="">
                             <img class="w-100" src="data:image;base64,<?= getMovie($movies["movie_id"]) ?>" alt="<?= $movies["movie_name"] ?>">
@@ -228,47 +198,68 @@ if (isset($_GET["movie_id"])) {
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-lg-9 text-light order-1 order-lg-2 pb-4 ps-0 pe-0">
-                    <iframe width="100%" height="100%" class="w-100" style="min-height: 350px;" src="https://www.youtube.com/embed/giWIr7U1deA?si=dkp2l1590Z0rckDv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <div class="col-12 col-lg-9 text-light order-1 order-lg-2 pb-2 pb-md-4 ps-0 pe-0">
+                    <iframe width="100%" height="100%" class="w-100" style="min-height: 400px;" src="<?= $movies["trailer"] ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
 
-                <div class="col order-last p-4">
-                    <div class="row">
-                        <div class="col text-warning">
-                            <div class="row ">
-                                <div class="col w-25">Genre</div>
-                                <div class="col">:</div>
-                                <div class="col">attribut</div>
-                            </div>
-                            <div class="row">
-                                <div class="col w-25">Produser</div>
-                                <div class="col">:</div>
-                                <div class="col">attribut</div>
-                            </div>
-                            <div class="row">
-                                <div class="col w-25">Sutradara</div>
-                                <div class="col">:</div>
-                                <div class="col">attribut</div>
-                            </div>
-                            <div class="row">
-                                <div class="col w-25">Penulis</div>
-                                <div class="col">:</div>
-                                <div class="col">attribut</div>
-                            </div>
-                            <div class="row">
-                                <div class="col w-25">Produksi</div>
-                                <div class="col">:</div>
-                                <div class="col">attribut</div>
-                            </div>
+                <div class="col order-3 p-4 text-light">
+                    <h3 class="text-uppercase pb-3"><?= $movies["movie_name"] ?></h3>
 
-                            <div class="row">
-                                <div class="col w-25">Cast</div>
-                                <div class="col">:</div>
-                                <div class="col">attribut</div>
-                            </div>
+                    <div class="row row-cols-2 row-cols-lg-3 row-cols-md-3 g-2 pb-3">
 
-                        </div>
+                        <?php
+
+                        $genres = explode(",", $movies["genre"]);
+                        foreach ($genres as $genre) :
+                        ?>
+                            <div class="col"><button data-aos="flip-right" data-aos-duration="2000" class="w-100 btn btn-outline-info btn-dark rounded-4" style="font-family: Verdana, Geneva, Tahoma, sans-serif;"><?= $genre ?></button></div>
+
+                        <?php endforeach; ?>
+
                     </div>
+                    <div class="row" data-aos="flip-right" data-aos-duration="2000">
+                        <div class="col-1 label">Produser</div>
+                        <div class="col-1" style="width: 3px;">:</div>
+                        <div class="col"><?= $movies["produser"] ?></div>
+                    </div>
+                    <div class="row" data-aos="flip-right" data-aos-duration="2000">
+                        <div class="col-1 label">Sutradara</div>
+                        <div class="col-1" style="width: 3px;">:</div>
+                        <div class="col"><?= $movies["sutradara"] ?></div>
+                    </div>
+                    <div class="row" data-aos="flip-right" data-aos-duration="2000">
+                        <div class="col-1 label">Penulis</div>
+                        <div class="col-1" style="width: 3px;">:</div>
+                        <div class="col"><?= $movies["penulis"] ?></div>
+                    </div>
+                    <div class="row" data-aos="flip-right" data-aos-duration="2000">
+                        <div class="col-1 label">Produksi</div>
+                        <div class="col-1" style="width: 3px;">:</div>
+                        <div class="col"><?= $produser[0]["supplier_name"] ?></div>
+                    </div>
+
+                    <div class="row" data-aos="flip-right" data-aos-duration="2000">
+                        <div class="col-1 label">Cast</div>
+                        <div class="col-1" style="width: 3px;">:</div>
+                        <div class="col"><?= $movies["cast"] ?></div>
+                    </div>
+
+                    <!-- </div>
+                    </div> -->
+                </div>
+
+                <div class="col-12 col-lg-6 text-warning order-last p-4">
+
+                    <h5 class=" pb-3 text-secondary shadow-sm" data-aos="flip-right" data-aos-duration="2000"><?= floor($movies["movie_length"] / 60) ?> Hours <?= $movies["movie_length"] % 60 ?> Minutes <i class="bi bi-hourglass"></i></h5>
+                    <!-- <h3 class="text-uppercase pb-3">Sinopsis</h3> -->
+
+
+                    <button class="btn btn-dark btn-outline-warning w-100 mb-5" data-aos="flip-right" data-aos-duration="2000">PLAYING AT</button>
+
+                    <p class="text" data-aos="flip-right" data-aos-duration="2000">
+                        <?= $movies["movie_details"] ?>
+                    </p>
+
                 </div>
 
             </div>
@@ -276,9 +267,62 @@ if (isset($_GET["movie_id"])) {
 
 
         </div>
+        <footer data-aos="zoom-in">
+            <div class="container-fluid bg-dark text-light p-3">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="p-2">PCinemaU</h5>
+                        <p class="p-2">PCinemaU adalah sebuah website yang menyediakan informasi film-film terkini dan terupdate</p>
+                    </div>
+                    <div class="col">
+                        <h5>Navigation</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#">Home</a></li>
+                            <li><a href="index.php#nowplaying">Now Playing</a></li>
+                            <li><a href="index.php#upcoming">Upcoming</a></li>
+                            <li><a href="index.php#theatre">Theatre</a></li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <h5>Our Social Media</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#">Instagram</a></li>
+                            <li><a href="#">Twitter</a></li>
+                            <li><a href="#">Facebook</a></li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <h5>Our Partner</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#">Cinema 21</a></li>
+                            <li><a href="#">XXI</a></li>
+                            <li><a href="#">CGV</a></li>
+                            <li><a href="#">Cinepolis</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+     <!-- AOS -->
+     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
 
-    </div>
-    </div>
+
+<script>
+    $(document).ready(function() {
+        $(".poster").hover(function() {
+            $(this).css("background-color", "rgba(0, 0, 0, 0.5)");
+            $(this).css("transition", "0.5s");
+        }, function() {
+            $(this).css("background-color", "rgba(0, 0, 0, 0)");
+            $(this).css("transition", "0.5s");
+        });
+    })
+</script>
 </body>
 
 </html>
