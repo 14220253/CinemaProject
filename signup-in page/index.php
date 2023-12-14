@@ -292,6 +292,8 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
 
 
             <h1 class="mt-5 mb-5" id="theatre" data-aos="flip-right" data-aos-duration="1000">Theatre</h1>
+            <iframe data-aos="zoom-in-up" data-aos-delay="300" data-aos-duration="800" 
+            src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d126635.79453324236!2d112.66819761806646!3d-7.312425874083968!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sCinema!5e0!3m2!1sen!2sid!4v1702571531492!5m2!1sen!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 
         </div>
 
