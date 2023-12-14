@@ -137,7 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <h2>Sign in</h2>
                 <form method="post" class="form">
                     <div class="inputBox">
-                        <input type="text" name="username" value="<?= htmlspecialchars($_POST["username"] ?? "") ?>" required autocomplete="off"> <!--value yang aku tuli ini agar inputannya tidak hilang saat direfresh-->
+                        <input type="text" name="username" value="<?= htmlspecialchars($_POST["username"] ?? "") ?>" required autocomplete="off">
                         <i>Username</i>
                     </div>
                     <div class="inputBox">
