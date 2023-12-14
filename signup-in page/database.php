@@ -44,8 +44,20 @@ function insertData ($data) {
         document.location.href = 'signin-page.html'
     </script>";
     return mysqli_affected_rows($mysqli);
+}
 
+
+function getMovie($id) {
+    global $mysqli;
+    $query = "SELECT * FROM movie WHERE movie_id = $id";
+    $result = mysqli_query($mysqli, $query);
+    $row = mysqli_fetch_assoc($result);
+    $poster = $row["movie_image"];
+    // header("Content-type: image/jpg");
+    echo base64_encode($poster);
 
 }
+
+
 
 ?>

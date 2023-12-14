@@ -4,18 +4,22 @@ session_start();
 require __DIR__ . "/database.php";
 $guessUser = false;
 if (isset($_SESSION["login"])) {
-    
+
     $data = $_SESSION["username"];
 
     $sql = "SELECT * FROM customer WHERE username = '$data'";
 
     $result = $mysqli->query($sql);
     $user = $result->fetch_assoc();
-    
+
     $guessUser = false;
 } else {
     $guessUser = true;
 }
+
+
+$nowPlaying = query("SELECT * FROM movie");
+// $upcoming = query("SELECT * FROM movie");
 
 
 ?>
@@ -110,7 +114,7 @@ if (isset($_SESSION["login"])) {
                             <a class="nav-link" href="#theatre"><i class="bi bi-geo-alt-fill"></i> Theatre</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="true">
                                 <i class="bi bi-person-circle"></i> Account
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -141,10 +145,10 @@ if (isset($_SESSION["login"])) {
                 </div>
             </div>
         </nav>
-        <div class="container text-light p-3">
+        <div class="container text-light pt-3">
 
             <!-- Carousel -->
-            <div class="row mt-5">
+            <div class="row pt-5">
                 <div class="col-lg-9 col-12">
                     <div id="demo" class="carousel slide" data-bs-ride="carousel">
 
@@ -260,27 +264,32 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
             </div>
 
             <!-- //now playing section -->
-            <h1 class="mt-5 mb-5" id="nowplaying" data-aos="flip-right" data-aos-duration="1000">NOW PLAYING</h1>
+            <h1 class="mt-5" id="nowplaying" data-aos="flip-right" data-aos-duration="1000">NOW PLAYING</h1>
+            <hr class="mb-5 bg-warning">
 
 
             <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 g-2 mb-5">
 
-                <?php for ($i = 0; $i < 20; $i++) : ?>
+                <?php foreach ($nowPlaying as $movie) : ?>
                     <div class="col">
 
                         <!-- <div class="card">
                     <div ></div> -->
                         <div class="card movie-card" data-aos="zoom-in-up" data-aos-delay="300" data-aos-duration="800">
-                            <img class="card-img-top" src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//catalog-image/100/MTA-121903488/no-brand_no-brand_full02.jpg" alt="">
+                            <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"]?>" class="text-decoration-none text-dark" >
+                                <img class="card-img-top" src="data:image;base64,<?php getMovie($movie["movie_id"]) ?>" alt="<?= $movie["movie_name"] ?>">
+                            </a>
                             <div class="card-body">
-                                <h6 class="card-title">Avenger: Endgame (2019)</h6>
-                                <p class="card-text">Action, Adventure, Fantasy, Sci-fi</p>
-                                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#MovieDetail">See Detail</a>
+
+                                <!-- <p class="card-text">Action, Adventure, Fantasy, Sci-fi</p> -->
+                                <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"]?>" class="text-decoration-none text-dark" >
+                                    <h6 class="card-title text-center"><b><?= $movie["movie_name"] ?></b></h6>
+                                </a>
                             </div>
                         </div>
                         <!-- </div> -->
                     </div>
-                <?php endfor; ?>
+                <?php endforeach; ?>
 
             </div>
 
@@ -295,7 +304,7 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
 
         </div>
 
-       
+
 
 
 
@@ -344,7 +353,7 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
 
     <!-- Modal -->
     <!-- Button to Open the Modal -->
-    
+
 
     <!-- The Modal -->
     <div class="modal modal-fullscreen-sm-down" id="MovieDetail">
@@ -358,10 +367,10 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
                 </div>
 
                 <!-- Modal body -->
-                <div class="modal-body text-bg-dark" >
-                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2" >
+                <div class="modal-body text-bg-dark">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2">
                         <div class="col">
-                        <img src="https://s1.bukalapak.com/img/68286857232/large/Poster_Film___Avengers_Endgame___Marvel_Studios___Movie_Post.jpg" alt="" style="width: 100%;">
+                            <img src="https://s1.bukalapak.com/img/68286857232/large/Poster_Film___Avengers_Endgame___Marvel_Studios___Movie_Post.jpg" alt="" style="width: 100%;">
                         </div>
                         <div class="col">
 
@@ -371,44 +380,44 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
                                     <td>:</td>
                                 </tr>
                                 <tr>
-                                <td>Duration</td>
+                                    <td>Duration</td>
                                     <td>:</td>
                                 </tr>
                                 <tr>
-                                <td>Release Date</td>
+                                    <td>Release Date</td>
                                     <td>:</td>
                                 </tr>
                                 <tr>
-                                <td>Director</td>
+                                    <td>Director</td>
                                     <td>:</td>
                                 </tr>
                                 <tr>
-                                <td>Cast</td>
+                                    <td>Cast</td>
                                     <td>:</td>
                                 </tr>
                                 <tr>
                                     <td>Synopsis</td>
                                     <td>:</td>
                                 </tr>
-                                
 
-                                
+
+
                             </table>
-                            
+
                             <script>
-                                $(document).ready(function(){
+                                $(document).ready(function() {
                                     $("#MovieDetail").find("td").addClass("pe-2");
                                 })
                             </script>
                         </div>
-                        
+
                     </div>
                     <p class="pt-3 p-1 float-end" style="text-align: justify;">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum quis asperiores ipsam enim cupiditate vel repellat ad quas consequatur minima! Eveniet adipisci ab facilis harum fugit aliquam laborum. Reprehenderit, aut!
                     </p>
-                                
 
-                    
+
+
                 </div>
 
                 <!-- Modal footer -->
