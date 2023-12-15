@@ -77,6 +77,23 @@ $nowPlaying = query("SELECT * FROM movie");
             border-radius: 10px;
 
         }
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            padding-top: 133.33%;
+            /* This sets the aspect ratio to 4:3. Adjust this value to get the aspect ratio you want. */
+            overflow: hidden;
+        }
+
+        .image-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     </style>
     <script src="../Partials/autoHoverBG.js"></script>
     <link rel="stylesheet" href="../Partials/general.css">
@@ -191,7 +208,7 @@ $nowPlaying = query("SELECT * FROM movie");
                             <div class="carousel-item">
                                 <img src="../Assets/transformer.jpg" alt="" class="d-block" style="width:100%">
                                 <div class="carousel-caption">
-                                    <h4 class="pt-1 pe-2 ps-2">Transformer: Rise Of Extinction</h4>
+                                    <h4 class="pt-1 pe-2 ps-2">Transformer: Age Of Extinction</h4>
                                 </div>
                             </div>
 
@@ -275,21 +292,29 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
 
                         <!-- <div class="card">
                     <div ></div> -->
-                        <div class="card movie-card" data-aos="zoom-in-up" data-aos-delay="300" data-aos-duration="1000">
-                            <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"]?>" class="text-decoration-none text-dark" >
-                                <img class="card-img-top" src="data:image;base64,<?php getMovie($movie["movie_id"]) ?>" alt="<?= $movie["movie_name"] ?>">
-                            </a>
-                            <div class="card-body">
+                        <div class="card movie-card h-100 " data-aos="zoom-in-up" data-aos-delay="300" data-aos-duration="1000">
+                            <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
+                                <div class="image-container">
+                                    <img class="card-img-top" style="object-fit: cover ;" src="data:image;base64,<?php getMovie($movie["movie_id"]) ?>" alt="<?= $movie["movie_name"] ?>">
 
-                                <!-- <p class="card-text">Action, Adventure, Fantasy, Sci-fi</p> -->
-                                <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"]?>" class="text-decoration-none text-dark" >
-                                    <h6 class="card-title text-center"><b><?= $movie["movie_name"] ?></b></h6>
-                                </a>
-                            </div>
+                                </div>
+                            </a>
+                            <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
+
+                                <div class="card-body">
+
+                                    <!-- <p class="card-text">Action, Adventure, Fantasy, Sci-fi</p> -->
+                                    <h6 class="card-title text-center "><b><?= $movie["movie_name"] ?></b></h6>
+
+                                </div>
+                            </a>
                         </div>
                         <!-- </div> -->
                     </div>
                 <?php endforeach; ?>
+
+
+
 
             </div>
 
@@ -439,6 +464,17 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init();
+    </script>
+    <script>
+        $(document).ready(function() {
+            $(".poster").hover(function() {
+                $(this).css("background-color", "rgba(0, 0, 0, 0.5)");
+                $(this).css("transition", "0.5s");
+            }, function() {
+                $(this).css("background-color", "rgba(0, 0, 0, 0)");
+                $(this).css("transition", "0.5s");
+            });
+        })
     </script>
 </body>
 

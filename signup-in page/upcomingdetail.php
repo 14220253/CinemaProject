@@ -89,11 +89,12 @@ if (isset($_GET["movie_id"])) {
     <!-- AOS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
-        
+
 
         * {
             font-family: "Quicksand", sans-serif;
@@ -113,9 +114,39 @@ if (isset($_GET["movie_id"])) {
             width: 90px;
         }
     </style>
+    <!-- sweetalert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+    </script>
+
+    <?php if(isset($_GET["err"])){
+        if ($_GET["err"] == 1){
+            echo "<script>
+            $(document).ready(function() {
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Please input number between 1 and 10'
+                })
+            })";
+            $_GET["err"] = 0;
+        }    
+        
+    }?>
 </head>
 
 <body>
+
     <section></section>
     <div class="bg-mid"></div>
 
@@ -192,14 +223,14 @@ if (isset($_GET["movie_id"])) {
                             <img class="w-100" src="data:image;base64,<?= getMovie($movies["movie_id"]) ?>" alt="<?= $movies["movie_name"] ?>">
                         </a>
                         <div class="d-grid w-100">
-                            <button type="button" class="btn btn-primary btn-block">
+                            <a href="buyTicketPage.php?id=<?=$movies["movie_id"]?>" class="btn btn-primary btn-block">
                                 Buy Ticket
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
                 <div class="col-12 col-lg-9 text-light order-1 order-lg-2 pb-2 pb-md-4 ps-0 pe-0">
-                    <iframe width="100%" height="100%" class="w-100" style="min-height: 400px;" src="<?= $movies["trailer"] ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe width="100%" height="100%" class="w-100" style="min-height: 300px;" src="<?= $movies["trailer"] ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
 
                 <div class="col order-3 p-4 text-light">
@@ -254,13 +285,19 @@ if (isset($_GET["movie_id"])) {
                     <!-- <h3 class="text-uppercase pb-3">Sinopsis</h3> -->
 
 
-                    <button class="btn btn-dark btn-outline-warning w-100 mb-5" data-aos="flip-right" data-aos-duration="2000">PLAYING AT</button>
+                    <button class="playing-at btn btn-dark btn-outline-warning w-100 mb-5" data-aos="flip-right" data-aos-duration="2000" style="font-family: Verdana, Geneva, Tahoma, sans-serif;">PLAYING AT</button>
 
                     <p class="text" data-aos="flip-right" data-aos-duration="2000">
                         <?= $movies["movie_details"] ?>
                     </p>
 
                 </div>
+
+            </div>
+            <div class="container-fluid  text-light">
+                <table class="ajax-table table-hover table table-dark table-stripped">
+
+                </table>
 
             </div>
 
@@ -304,25 +341,136 @@ if (isset($_GET["movie_id"])) {
             </div>
         </footer>
     </div>
-    
-     <!-- AOS -->
-     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- AOS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init();
     </script>
 
-
-<script>
-    $(document).ready(function() {
-        $(".poster").hover(function() {
-            $(this).css("background-color", "rgba(0, 0, 0, 0.5)");
-            $(this).css("transition", "0.5s");
-        }, function() {
-            $(this).css("background-color", "rgba(0, 0, 0, 0)");
-            $(this).css("transition", "0.5s");
+    <script>
+        $(document).ready(function() {
+            $(".ajax-table").hide();
+            let status = false;
+            $(".playing-at").on("click", function() {
+                if (status == false) {
+                    $(".ajax-table").show();
+                    status = true;
+                    $.ajax({
+                        url: "showPlayingAt.php",
+                        data: {
+                            id: <?= $movies["movie_id"] ?>,
+                            theatre_id: 1
+                        },
+                        method: "GET",
+                        success: function(data) {
+                            $(".ajax-table").html(data);
+                        }
+                    })
+                } else {
+                    $(".ajax-table").hide();
+                    status = false;
+                }
+            })
         });
-    })
-</script>
+    </script>
+
+    <div class="modal  fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Select tickets</h5>
+                    <button style="border-style: none;" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <!-- <span aria-hidden="true">&times;</span> -->
+                    </button>
+                </div>
+                <form method="post" action="cinemaSeatPage.php">
+                    <div class="modal-body">
+                        <input type="hidden" name="theatre" class="data_theatre">
+                        <input type="hidden" name="time" class="data_time">
+                        <input type="hidden" name="movie_id" value="<?= $movies["movie_id"] ?>" class="data_movie">
+                        <!-- <div class="form-group"> -->
+                            <label for="select_ticket">Select tickets</label>
+                            <input class="form-control" type="number" id="select_ticket" name="select_ticket" min="1" max="10">
+                        <!-- </div> -->
+
+                    </div>
+                    <div class="modal-footer d-flex justify-content-center">
+                        <button type="button" class="btn btn-danger cancelButton" style="min-width: 30%;" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success continueButton" style="min-width: 30%;" name="submit">Continue</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        $(document).ready(function() {
+            $(".cancelButton").on("click", function() {
+                $(".select_theatre").val("");
+                $(".select_time").val("");
+                $("#select_ticket").val("");
+            })
+
+            $(document).on("click", ".hours", function() {
+                event.preventDefault();
+                let time = $(this).val();
+                // console.log(time);
+
+                let theatre = $(this).closest("tr").find(".theatre").text();
+                // console.log(theatre);
+                //show modal
+                $("#exampleModal").find(".data_theatre").val(theatre);
+                $("#exampleModal").find(".data_time").val(time);
+                $("#exampleModal").modal("show");
+            })
+            // $('.continueButton').on('click', function() {
+            //     let ticket = $("#select_ticket").val();
+            //     if (ticket <= 0 || ticket > 10) {
+                    // Toast.fire({
+                    //     icon: "error",
+                    //     title: "Please input number between 1 and 10"
+                    // })
+
+            //     } else {
+            //         let time = $(".hours").val();
+            //         let theatre = $(".theatre").text();
+            //         // console.log(ticket);
+            //         // console.log(time);
+            //         // console.log(theatre);
+            //         $.ajax({
+            //             url: "cinemaSeatPage.php",
+            //             data: {
+            //                 ticket: ticket,
+            //                 time: time,
+            //                 theatre: theatre
+            //             },
+            //             method: "POST",
+            //             success: function(data) {
+            //                 // $(".ajax-table").html(data);
+            //                 // console.log(data);
+            //                 $("#select_ticket").val("");
+            //                 // window.location.href="cinemaSeatPage.php";
+            //                 
+
+
+            //             }
+            //         })
+
+            //     }
+
+            // })
+
+
+
+
+
+        })
+    </script>
+
+
 </body>
 
 </html>
