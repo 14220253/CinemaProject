@@ -118,7 +118,7 @@ if (isset($_SESSION["login"])) {
 
                                 <?php if (!$guessUser) : ?>
                                     <li><a class="dropdown-item" href=" logout.php">Log Out</a></li>
-                                    <li><a class="dropdown-item" href="#">My Data</a></li>
+                                    <li><a class="dropdown-item" href="profile-page.php">My Data</a></li>
                                 <?php else : ?>
                                     <li><a class="dropdown-item" href="../signup-in page/signin-page.php">Sign In</a></li>
                                     <li><a class="dropdown-item" href="../signup-in page/signup-page.php">Sign Up</a></li>
@@ -219,7 +219,7 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
                             <div class="card-footer">
                                 <div class="row row-cols-lg-1 row-cols-1 gy-1 row-cols-sm-2 row-cols-md-4">
                                     <div class="col">
-                                        <a href="#" class="btn btn-dark w-100">Your Profile</a>
+                                        <a href="profile-page.php" class="btn btn-dark w-100">Your Profile</a>
                                     </div>
                                     <div class="col">
                                         <a href="#" class="btn btn-dark w-100">Your Ticket</a>
