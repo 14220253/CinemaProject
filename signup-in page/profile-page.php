@@ -183,8 +183,8 @@ if (isset($_SESSION["login"])) {
                         </div>
                         <div class="stats">
                             <a href="profileedit-page.php" class="edit"><b>Edit Profile</b></a> <br>
-                            <a href="#"><b>Change Password</b></a> <br>
-                            <a href="#" class="delete"><b>Delete Account</b></a>
+                            <a href="changepassword-page.php"><b>Change Password</b></a> <br>
+                            <a href="deleteaccount-page.php" class="delete"><b>Delete Account</b></a>
                         </div>
                     </div>
                     <div class="col-5">
