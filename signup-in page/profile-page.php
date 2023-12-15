@@ -185,6 +185,8 @@ if (isset($_SESSION["login"])) {
                             <a href="profileedit-page.php" class="edit"><b>Edit Profile</b></a> <br>
                             <a href="changepassword-page.php"><b>Change Password</b></a> <br>
                             <a href="deleteaccount-page.php" class="delete"><b>Delete Account</b></a>
+                            <br>
+                            <a class="btn btn-secondary w-25" href="index.php"><b style="color:white;">Back</b></a>
                         </div>
                     </div>
                     <div class="col-5">

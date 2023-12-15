@@ -117,8 +117,8 @@ if (isset($_SESSION["login"])) {
 
 
                                 <?php if (!$guessUser) : ?>
-                                    <li><a class="dropdown-item" href=" logout.php">Log Out</a></li>
                                     <li><a class="dropdown-item" href="profile-page.php">My Data</a></li>
+                                    <li><a class="dropdown-item" href=" logout.php">Log Out</a></li>
                                 <?php else : ?>
                                     <li><a class="dropdown-item" href="../signup-in page/signin-page.php">Sign In</a></li>
                                     <li><a class="dropdown-item" href="../signup-in page/signup-page.php">Sign Up</a></li>
