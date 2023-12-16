@@ -12,11 +12,11 @@ if (isset($_SESSION["login"])) {
     $user = $result->fetch_assoc();
     
     $guessUser = false;
+    $_SESSION["pass"] = $user["password"];
 } else {
     $guessUser = true;
     header("Location: /signup-in page/signin-page.php");
 }
-
 
 ?>
 
@@ -59,7 +59,6 @@ if (isset($_SESSION["login"])) {
   </style>
   <?php
 
-  session_start();
   //cek apakah tombol submit sudah ditekan
   if (isset($_POST['register'])) {
     //  cek apakah valid
@@ -121,7 +120,6 @@ if (isset($_SESSION["login"])) {
         })
       })
     </script>
-
   <?php elseif (isset($errors['username'])) : ?>
     <script>
       $(document).ready(function() {
@@ -137,15 +135,6 @@ if (isset($_SESSION["login"])) {
         Toast.fire({
           icon: 'error',
           title: '<?php echo $errors['password']; ?>!',
-        })
-      })
-    </script>
-  <?php elseif (isset($errors['confirmPassword'])) : ?>
-    <script>
-      $(document).ready(function() {
-        Toast.fire({
-          icon: 'error',
-          title: '<?php echo $errors['confirmPassword']; ?>!',
         })
       })
     </script>
@@ -193,7 +182,7 @@ if (isset($_SESSION["login"])) {
         <h2>Edit Profile</h2>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" class="form">
           <div class="inputBox">
-            <input type="text" id="name" name="name" placeholder ="name" value=<?php echo htmlspecialchars($user["name"]) ?> required value="<?php echo htmlspecialchars($form_data["name"] ?? '') ?>">
+          <input type="text" id="name" name="name" placeholder ="name" value=<?php echo htmlspecialchars($user["name"]) ?> required value="<?php echo htmlspecialchars($form_data["name"] ?? '') ?>">
 
           </div>
           <div class="inputBox">
