@@ -1,3 +1,26 @@
+<?php
+session_start();
+require __DIR__ . "/database.php";
+$guessUser = false;
+if (isset($_SESSION["login"])) {
+    
+    $data = $_SESSION["username"];
+
+    $sql = "SELECT * FROM customer WHERE username = '$data'";
+
+    $result = $mysqli->query($sql);
+    $user = $result->fetch_assoc();
+    
+    $guessUser = false;
+    $_SESSION["pass"] = $user["password"];
+} else {
+    $guessUser = true;
+    header("Location: /signup-in page/signin-page.php");
+}
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,7 +64,7 @@
   //cek apakah tombol submit sudah ditekan
   if (isset($_POST['register'])) {
     //  cek apakah valid
-    require "process-signup.php";
+    require "process-deleteaccount.php";
     $_SESSION['errors'] = $errors;
     $_SESSION['form_data'] = $_POST;
     $_SESSION['confirm'] = $confirm;
@@ -83,57 +106,12 @@
       }
     });
   </script>
-  <?php if (isset($errors['name'])) : ?>
+  <?php if (isset($errors['password'])) : ?>
     <script>
       $(document).ready(function() {
         Toast.fire({
           icon: 'error',
-          title: '<?php echo $errors['name']; ?>!'
-        })
-      })
-    </script>
-  <?php elseif (isset($errors['address'])) : ?>
-    <script>
-      $(document).ready(function() {})
-      Toast.fire({
-        icon: 'error',
-        title: '<?php echo $errors['address']; ?>!'
-      })
-    </script>
-  <?php elseif (isset($errors['phone_number'])) : ?>
-    <script>
-      $(document).ready(function() {
-        Toast.fire({
-          icon: 'error',
-          title: '<?php echo $errors['phone_number']; ?>!',
-        })
-      })
-    </script>
-
-  <?php elseif (isset($errors['username'])) : ?>
-    <script>
-      $(document).ready(function() {
-        Toast.fire({
-          icon: 'error',
-          title: '<?php echo $errors['username']; ?>!',
-        })
-      })
-    </script>
-  <?php elseif (isset($errors['password'])) : ?>
-    <script>
-      $(document).ready(function() {
-        Toast.fire({
-          icon: 'error',
-          title: '<?php echo $errors['password']; ?>!',
-        })
-      })
-    </script>
-  <?php elseif (isset($errors['confirmPassword'])) : ?>
-    <script>
-      $(document).ready(function() {
-        Toast.fire({
-          icon: 'error',
-          title: '<?php echo $errors['confirmPassword']; ?>!',
+          title: '<?php echo $errors['password']; ?>!'
         })
       })
     </script>
@@ -183,20 +161,13 @@
           <div class="inputBox">
             <input id="password" type="password" name="password" required value="<?php echo htmlspecialchars($form_data["password"] ?? '') ?>">
             <i>Password</i>
-
-          </div>
-          <div class="inputBox">
-            <input id="confirmPassword" type="password" name="confirmPassword" required value="<?php echo htmlspecialchars($form_data["confirmPassword"] ?? '') ?>">
-            <i>Confirm Password</i>
-
           </div>
           
-        <div class="row"></div>
+          <div class="row"></div>
           <div class="warning" style="display:none; color:red">
           </div>
           <div class="inputBox">
-            <!-- <button>Confirm</button> -->
-            <button type="button" class="btn btn-danger w-100">Delete Account</button>
+            <button type="submit" class="btn btn-danger w-100" name="register">Delete Account</button>
           </div>
         </form>
       </div>

@@ -33,8 +33,9 @@ foreach ($requiredFields as $field) {
         $errors[$field] = $errorMessage[$field];
     }
 }
+
 if (!password_verify($_POST["password"], $_SESSION["pass"])) {
-    $errors['password'] = "Password doesn't match";
+    $errors['password'] = "Wrong Password";
 }
 
 if (!validatePhoneNumber($_POST["phone_number"]) && !empty($_POST["phone_number"])) {
@@ -42,15 +43,16 @@ if (!validatePhoneNumber($_POST["phone_number"]) && !empty($_POST["phone_number"
 }
 
 if (empty($errors)) {
+    $orusername = $_SESSION["username"];
     $name = validData($_POST["name"]);
     $address = validData($_POST["address"]);
     $phone_number = validData($_POST["phone_number"]);
     $username = validData($_POST["username"]);
-    $sql = "UPDATE customer SET username = '$username', address = '$address', phone_number = '$phone_number', name = '$name' WHERE username = '" . $user["username"] . "'";
+    $sql = "UPDATE customer SET username = '$username', address = '$address', phone_number = '$phone_number', name = '$name' WHERE username = '$orusername'";
 
     try {
         if ($mysqli->query($sql)) {
-            $_SESSION["username"] = $username;
+            session_destroy();
             header("Location: /profile-page.php");
             // Rest of your code
         } else {

@@ -34,29 +34,6 @@
       text-decoration: none;
     }
   </style>
-  <?php
-
-  session_start();
-  //cek apakah tombol submit sudah ditekan
-  if (isset($_POST['register'])) {
-    //  cek apakah valid
-    require "process-signup.php";
-    $_SESSION['errors'] = $errors;
-    $_SESSION['form_data'] = $_POST;
-    $_SESSION['confirm'] = $confirm;
-
-    // Prevent form resubmission
-    header('Location: ' . $_SERVER['REQUEST_URI']);
-    exit;
-  }
-  // Retrieve the error messages and form data from the session
-  $errors = $_SESSION['errors'] ?? [];
-  $form_data = $_SESSION['form_data'] ?? [];
-  $confirm = $_SESSION['confirm'] ?? false;
-
-  // Clear the form data and error messages from the session
-  unset($_SESSION['form_data'], $_SESSION['errors']);
-  ?>
 
 <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
@@ -69,107 +46,6 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"
         ></script>
-  <script>
-    const Toast = Swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      }
-    });
-  </script>
-  <?php if (isset($errors['name'])) : ?>
-    <script>
-      $(document).ready(function() {
-        Toast.fire({
-          icon: 'error',
-          title: '<?php echo $errors['name']; ?>!'
-        })
-      })
-    </script>
-  <?php elseif (isset($errors['address'])) : ?>
-    <script>
-      $(document).ready(function() {})
-      Toast.fire({
-        icon: 'error',
-        title: '<?php echo $errors['address']; ?>!'
-      })
-    </script>
-  <?php elseif (isset($errors['phone_number'])) : ?>
-    <script>
-      $(document).ready(function() {
-        Toast.fire({
-          icon: 'error',
-          title: '<?php echo $errors['phone_number']; ?>!',
-        })
-      })
-    </script>
-
-  <?php elseif (isset($errors['username'])) : ?>
-    <script>
-      $(document).ready(function() {
-        Toast.fire({
-          icon: 'error',
-          title: '<?php echo $errors['username']; ?>!',
-        })
-      })
-    </script>
-  <?php elseif (isset($errors['password'])) : ?>
-    <script>
-      $(document).ready(function() {
-        Toast.fire({
-          icon: 'error',
-          title: '<?php echo $errors['password']; ?>!',
-        })
-      })
-    </script>
-  <?php elseif (isset($errors['confirmPassword'])) : ?>
-    <script>
-      $(document).ready(function() {
-        Toast.fire({
-          icon: 'error',
-          title: '<?php echo $errors['confirmPassword']; ?>!',
-        })
-      })
-    </script>
-  <?php elseif ($confirm) : $_SESSION['confirm'] = false; ?>
-    <script>
-      $(document).ready(function() {
-        Swal.fire({
-          icon: "success",
-          html: `<h1 style="font-family: 'Vina Sans', sans-serif; font-size:4em">SUCCESS!</h1>`,
-          footer: "<b><a style='font-size:1.2em; font-style:' href='signin-page.php'>Sign-In Now</a></b>",
-          showClass: {
-            popup: `
-            animate__animated
-            animate__fadeInUp
-            animate__faster
-          `
-          },
-          hideClass: {
-            popup: `
-            animate__animated
-            animate__fadeOutDown
-            animate__faster
-          `
-          },
-          customClass: {
-            popup: 'custom-swal' // Apply the custom class
-          }
-        })
-      })
-    </script>
-  <?php endif;
-  foreach ($errors as $err) {
-    $err = "";
-  }
-
-  ?>
-
 </head>
 
 <body>

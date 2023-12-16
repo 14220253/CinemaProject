@@ -1,3 +1,27 @@
+<?php
+session_start();
+require __DIR__ . "/database.php";
+$guessUser = false;
+if (isset($_SESSION["login"])) {
+    
+    $data = $_SESSION["username"];
+
+    $sql = "SELECT * FROM customer WHERE username = '$data'";
+
+    $result = $mysqli->query($sql);
+    $user = $result->fetch_assoc();
+    
+    $guessUser = false;
+
+    $_SESSION["pass"] = $user["password"];
+} else {
+    $guessUser = true;
+    header("Location: /signup-in page/signin-page.php");
+}
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,7 +65,7 @@
   //cek apakah tombol submit sudah ditekan
   if (isset($_POST['register'])) {
     //  cek apakah valid
-    require "process-signup.php";
+    require "process-changepassword.php";
     $_SESSION['errors'] = $errors;
     $_SESSION['form_data'] = $_POST;
     $_SESSION['confirm'] = $confirm;
@@ -73,39 +97,12 @@
       }
     });
   </script>
-  <?php if (isset($errors['name'])) : ?>
+  <?php if (isset($errors['oldPassword'])) : ?>
     <script>
       $(document).ready(function() {
         Toast.fire({
           icon: 'error',
-          title: '<?php echo $errors['name']; ?>!'
-        })
-      })
-    </script>
-  <?php elseif (isset($errors['address'])) : ?>
-    <script>
-      $(document).ready(function() {})
-      Toast.fire({
-        icon: 'error',
-        title: '<?php echo $errors['address']; ?>!'
-      })
-    </script>
-  <?php elseif (isset($errors['phone_number'])) : ?>
-    <script>
-      $(document).ready(function() {
-        Toast.fire({
-          icon: 'error',
-          title: '<?php echo $errors['phone_number']; ?>!',
-        })
-      })
-    </script>
-
-  <?php elseif (isset($errors['username'])) : ?>
-    <script>
-      $(document).ready(function() {
-        Toast.fire({
-          icon: 'error',
-          title: '<?php echo $errors['username']; ?>!',
+          title: '<?php echo $errors['oldPassword']; ?>!',
         })
       })
     </script>
@@ -172,7 +169,7 @@
         <div class="row"></div>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" class="form">
           <div class="inputBox">
-            <input type="password" id="oldpassword" name="oldpassword" required value="<?php echo htmlspecialchars($form_data["name"] ?? '') ?>">
+            <input type="password" id="oldPassword" name="oldPassword" required value="<?php echo htmlspecialchars($form_data["oldPassword"] ?? '') ?>">
             <i>Old Password</i>
 
           </div>
