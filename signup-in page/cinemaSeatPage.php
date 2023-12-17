@@ -18,20 +18,30 @@ if (isset($_SESSION["login"])) {
 
 
 if (isset($_POST['submit']) && isset($_POST['select_ticket'])) {
+    $theatre = $_POST["theatre"];
+    $theatres = query("SELECT theatre_id from data_theatre where theatre_name = '$theatre'");
+    $theatre_id = $theatres[0]["theatre_id"];
+    var_dump($theatre_id);
+    
+    $movie_id = $_POST["movie_id"];
+    
     $maxTicket = $_POST['select_ticket'];
+    // $sql = "SELECT "
 
     if ($maxTicket > 10 || $maxTicket < 1) {
         header("Location: upcomingdetail.php?movie_id=$movie_id&err=1");
     }
-    // Send a response with a redirect URL
-    // echo json_encode(['redirect' => 'cinemaSeatPage.php']);
-    $movie_id = $_POST["movie_id"];
+    else if ($maxTicket > availableSeat(1, $theatre_id)) {
+        header("Location: upcomingdetail.php?movie_id=$movie_id&err=2");
+    }
+    
     $movies = query("SELECT * FROM movie WHERE movie_id = $movie_id");
     $name = $movies[0]["movie_name"];
-    $theatre = $_POST["theatre"];
+  
     $time = $_POST["time"];
+    $date = $_POST["date"];
 
-    $sql = "SELECT * FROM detail_penayangan ds JOIN movie m ON (m.movie_id= ds.fk_movie_id) JOIN data_theatre t ON (t.theatre_id = ds.fk_theatre_id) JOIN schedule_hours s ON (ds.detail_penayangan_id = s.fk_detail_penayangan_id) WHERE fk_movie_id = 1 and fk_theatre_id = 1 and jam_penayangan = '$time'";
+    $sql = "SELECT * FROM detail_penayangan ds JOIN movie m ON (m.movie_id= ds.fk_movie_id) JOIN data_theatre t ON (t.theatre_id = ds.fk_theatre_id) JOIN schedule_hours s ON (ds.detail_penayangan_id = s.fk_detail_penayangan_id) WHERE fk_movie_id = $movie_id and fk_theatre_id = $theatre_id and jam_penayangan = '$time'";
     $result = $mysqli->query($sql);
     $rows = [];
     while ($row = mysqli_fetch_assoc($result)) {
@@ -40,14 +50,14 @@ if (isset($_POST['submit']) && isset($_POST['select_ticket'])) {
     $theatre_id = $rows[0]["fk_theatre_id"];
 
     $harga = $rows[0]["harga_tiket"];
-    $date = $rows[0]["start_date"];
-    $sql2 = "SELECT diagram_kursi_id FROM diagran_kursi WHERE fk_theatre_id = $theatre_id";
+    // $date = $rows[0]["start_date"];
+    $sql2 = "SELECT diagram_kursi FROM diagran_kursi WHERE fk_theatre_id = $theatre_id";
     $result2 = $mysqli->query($sql2);
     $rows2 = [];
     while ($row2 = mysqli_fetch_assoc($result2)) {
         $rows2[] = $row2;
     }
-    $diagram_kursi_id = $rows2[0]["diagram_kursi_id"];
+    $diagram_kursi = $rows2[0]["diagram_kursi"];
 } else {
 
     header("Location: index.php");
@@ -64,9 +74,13 @@ if ($conn->connect_error) {
     die("Connection failed: " . $mysqli->connect_error);
 }
 
-function getSeatStatus($seatId, $conn)
+function getSeatStatus($seatId ,$conn)
 {
-    $sql = "SELECT status FROM seat WHERE kursi_id = '$seatId'";
+    global $theatre_id;
+    global $diagram_kursi;
+    $sql = "SELECT status FROM seat WHERE fusion_id = '$theatre_id-$diagram_kursi-$seatId'";
+    var_dump($theatre_id."-".$diagram_kursi ."-".$seatId);
+    
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -107,6 +121,8 @@ $seatStatus = array(
     'D7' => getSeatStatus('D7', $conn),
     'D8' => getSeatStatus('D8', $conn),
 );
+
+
 
 ?>
 <!DOCTYPE html>
@@ -198,18 +214,38 @@ $seatStatus = array(
                     type: 'POST',
                     url: 'updateSeats.php',
                     data: {
-                        selectedSeats: seatsToSend
+                        user: '<?=$data?>',
+                        movie_id : <?=$movie_id?>,
+                        theatre_id: <?=$theatre_id?>,
+                        diagram_kursi: <?=$diagram_kursi?>,
+                        price: initialPrice,
+                        ticketCount: $(".jumlahTiket").html(),
+                        date : $(".tanggalTayang").html(),
+                        selectedSeats: seatsToSend,
+                        time : $(".waktuTayang").html()
                     },
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            console.log('Seats updated successfully');
-                        } else {
-                            console.error('Error updating seats: ' + response.message);
+                    // dataType: 'json',
+                    success: function(data) {
+                        console.log('AJAX request success: ' + data);
+                        if (data == 1){
+                            window.location.href = "index.php?confirmP="+data;
                         }
+
+                        // if (response.status === 'success') {
+                        //     console.log('Seats updated successfully');
+                        // } else {
+                        //     console.error('Error updating seats: ' + response.message);
+                        // }
                     },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX request failed: ' + error);
+                    error: function(data) {
+                        // console.error('AJAX request failed: ' + error);
+                        console.log(data);
+                        if (data == 0){
+                            window.location.href = "index.php?confirmP="+data;
+                        }
+
+
+                        // xhr, status, error
                     }
                 });
             });
@@ -423,6 +459,7 @@ $seatStatus = array(
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
+                    
                     <button type="button" class="modalCloseButton btn btn-secondary" style="min-width: 30%;" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="strongConfirmButton btn btn-dark" style="min-width: 30%;">Confirm</button>
                 </div>
@@ -515,7 +552,7 @@ $seatStatus = array(
         <div class="d-flex justify-content-center align-content-center flex-column h-100">
             <div class="container-fluid  text-center text-light mt-3">
                 <h1 class="display-6 text-uppercase title text-warning" style="font-family: League Spartan, Verdana, Geneva, Tahoma, sans-serif;"></h1>
-                <h5><span class="namaTheater"><span><strong> <?= $theatre ?></strong></span> - </span><strong><?= $diagram_kursi_id ?></strong></h5>
+                <h5><span class="namaTheater"><span><strong> <?= $theatre ?></strong></span> - </span><strong><?= $diagram_kursi ?></strong></h5>
                 <strong>Date :</strong> <span class="tanggalTayang h-6">12-10-2023</span> | <strong>Time :</strong> <span class="waktuTayang"><?= $time ?></span> <br>
                 <strong>Tickets :</strong> <span class="jumlahTiket h-6"></span>/<span id="maxTicket"></span>, <strong>Total :</strong> Rp. <span class="hargaTiket">0</span> <br>
                 <hr>

@@ -113,6 +113,99 @@ if (isset($_GET["movie_id"])) {
         .label {
             width: 90px;
         }
+
+        iframe-container {
+            position: relative;
+        }
+
+        .iframe-loader {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* background-color: rgba(255, 255, 255, 0.7); */
+        }
+
+        .lds-facebook {
+            display: inline-block;
+            position: relative;
+
+            width: 80px;
+            height: 80px;
+        }
+
+        .lds-facebook div {
+            display: inline-block;
+            position: absolute;
+            left: 8px;
+            width: 16px;
+            background: #fff;
+            animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+        }
+
+        .lds-facebook div:nth-child(1) {
+            left: 8px;
+            animation-delay: -0.24s;
+        }
+
+        .lds-facebook div:nth-child(2) {
+            left: 32px;
+            animation-delay: -0.12s;
+        }
+
+        .lds-facebook div:nth-child(3) {
+            left: 56px;
+            animation-delay: 0;
+        }
+
+        @keyframes lds-facebook {
+            0% {
+                top: 8px;
+                height: 64px;
+            }
+
+            50%,
+            100% {
+                top: 24px;
+                height: 32px;
+            }
+        }
+
+        .scrollable-div {
+            overflow: auto;
+            height: 250px;
+        }
+
+        /* For Firefox */
+        .scrollable-div {
+            scrollbar-width: thin;
+        }
+
+        /* For Internet Explorer and Edge */
+        .scrollable-div {
+            -ms-overflow-style: none;
+        }
+
+        /* For Chrome, Safari and Opera */
+        .scrollable-div::-webkit-scrollbar {
+            width: 2px;
+        }
+
+        .scrollable-div::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .scrollable-div::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+
+        .scrollable-div::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
     </style>
     <!-- sweetalert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -130,8 +223,8 @@ if (isset($_GET["movie_id"])) {
         });
     </script>
 
-    <?php if(isset($_GET["err"])){
-        if ($_GET["err"] == 1){
+    <?php if (isset($_GET["err"])) {
+        if ($_GET["err"] == 1) {
             echo "<script>
             $(document).ready(function() {
                 Toast.fire({
@@ -139,13 +232,23 @@ if (isset($_GET["movie_id"])) {
                     title: 'Please input number between 1 and 10'
                 })
             })";
+            echo "</script>";
             $_GET["err"] = 0;
-        }    
-        
-    }?>
+        } else if ($_GET["err"] == 2) {
+            echo "<script>
+            $(document).ready(function() {
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Sorry no more available seat'
+                })
+            })";
+            echo "</script>";
+            $_GET["err"] = 0;
+        }
+    } ?>
 </head>
 
-<body>
+<body style="overflow-x: hidden;">
 
     <section></section>
     <div class="bg-mid"></div>
@@ -213,6 +316,12 @@ if (isset($_GET["movie_id"])) {
             </div>
         </nav>
 
+        <script>
+            function hideLoader() {
+                document.getElementById("iframeLoader").style.display = "none";
+            }
+        </script>
+
         <div class="container-fluid p-2 p-lg-5 p-md-5 p-sm-3">
             <h1 class="h1 text-center text-light pt-4 pb-4" style="font-size: 3em; font-weight: bolder; font-family: 'League Spartan';">NOW PLAYING</h1>
 
@@ -223,14 +332,22 @@ if (isset($_GET["movie_id"])) {
                             <img class="w-100" src="data:image;base64,<?= getMovie($movies["movie_id"]) ?>" alt="<?= $movies["movie_name"] ?>">
                         </a>
                         <div class="d-grid w-100">
-                            <a href="buyTicketPage.php?id=<?=$movies["movie_id"]?>" class="btn btn-primary btn-block">
+                            <a href="buyTicketPage.php?id=<?= $movies["movie_id"] ?>" class="btn btn-primary btn-block">
                                 Buy Ticket
                             </a>
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-lg-9 text-light order-1 order-lg-2 pb-2 pb-md-4 ps-0 pe-0">
-                    <iframe width="100%" height="100%" class="w-100" style="min-height: 300px;" src="<?= $movies["trailer"] ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <div class="col-12 col-lg-9 text-light order-1 order-lg-2 pb-2 pb-md-4 ps-0 pe-0 iframe-container" style="position: relative;">
+                    <div class="iframe-loader" id="iframeLoader">
+                        <div class="lds-facebook">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+
+                    <iframe width="100%" height="100%" class="w-100" style="min-height: 300px;" src="<?= $movies["trailer"] ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen onload="hideLoader()"></iframe>
                 </div>
 
                 <div class="col order-3 p-4 text-light">
@@ -243,59 +360,63 @@ if (isset($_GET["movie_id"])) {
                         $genres = explode(",", $movies["genre"]);
                         foreach ($genres as $genre) :
                         ?>
-                            <div class="col"><button data-aos="flip-right" data-aos-duration="2000" class="w-100 btn btn-outline-info btn-dark rounded-4" style="font-family: Verdana, Geneva, Tahoma, sans-serif;"><?= $genre ?></button></div>
+                            <div class="col"><a href="searchPage.php?genre=<?= $genre ?>" data-aos="flip-right" data-aos-duration="2000" class="w-100 btn btn-outline-info btn-dark rounded-4" style="font-family: Verdana, Geneva, Tahoma, sans-serif;"><?= $genre ?></a></div>
 
                         <?php endforeach; ?>
 
                     </div>
-                    <div class="row" data-aos="flip-right" data-aos-duration="2000">
-                        <div class="col-1 label">Produser</div>
-                        <div class="col-1" style="width: 3px;">:</div>
-                        <div class="col"><?= $movies["produser"] ?></div>
-                    </div>
-                    <div class="row" data-aos="flip-right" data-aos-duration="2000">
-                        <div class="col-1 label">Sutradara</div>
-                        <div class="col-1" style="width: 3px;">:</div>
-                        <div class="col"><?= $movies["sutradara"] ?></div>
-                    </div>
-                    <div class="row" data-aos="flip-right" data-aos-duration="2000">
-                        <div class="col-1 label">Penulis</div>
-                        <div class="col-1" style="width: 3px;">:</div>
-                        <div class="col"><?= $movies["penulis"] ?></div>
-                    </div>
-                    <div class="row" data-aos="flip-right" data-aos-duration="2000">
-                        <div class="col-1 label">Produksi</div>
-                        <div class="col-1" style="width: 3px;">:</div>
-                        <div class="col"><?= $produser[0]["supplier_name"] ?></div>
+                    <div class="scrollable-div">
+
+                        <div class="row" data-aos="flip-right" data-aos-duration="2000">
+                            <div class="col-1 label">Produser</div>
+                            <div class="col-1" style="width: 3px;">:</div>
+                            <div class="col"><?= $movies["produser"] ?></div>
+                        </div>
+                        <div class="row" data-aos="flip-right" data-aos-duration="2000">
+                            <div class="col-1 label">Sutradara</div>
+                            <div class="col-1" style="width: 3px;">:</div>
+                            <div class="col"><?= $movies["sutradara"] ?></div>
+                        </div>
+                        <div class="row" data-aos="flip-right" data-aos-duration="2000">
+                            <div class="col-1 label">Penulis</div>
+                            <div class="col-1" style="width: 3px;">:</div>
+                            <div class="col"><?= $movies["penulis"] ?></div>
+                        </div>
+                        <div class="row" data-aos="flip-right" data-aos-duration="2000">
+                            <div class="col-1 label">Produksi</div>
+                            <div class="col-1" style="width: 3px;">:</div>
+                            <div class="col"><?= $produser[0]["supplier_name"] ?></div>
+                        </div>
+
+                        <div class="row" data-aos="flip-right" data-aos-duration="2000">
+                            <div class="col-1 label">Cast</div>
+                            <div class="col-1" style="width: 3px;">:</div>
+                            <div class="col"><?= $movies["cast"] ?></div>
+                        </div>
+
                     </div>
 
-                    <div class="row" data-aos="flip-right" data-aos-duration="2000">
-                        <div class="col-1 label">Cast</div>
-                        <div class="col-1" style="width: 3px;">:</div>
-                        <div class="col"><?= $movies["cast"] ?></div>
-                    </div>
 
-                    <!-- </div>
-                    </div> -->
+
                 </div>
 
                 <div class="col-12 col-lg-6 text-warning order-last p-4">
 
                     <h5 class=" pb-3 text-secondary shadow-sm" data-aos="flip-right" data-aos-duration="2000"><?= floor($movies["movie_length"] / 60) ?> Hours <?= $movies["movie_length"] % 60 ?> Minutes <i class="bi bi-hourglass"></i></h5>
-                    <!-- <h3 class="text-uppercase pb-3">Sinopsis</h3> -->
-
 
                     <button class="playing-at btn btn-dark btn-outline-warning w-100 mb-5" data-aos="flip-right" data-aos-duration="2000" style="font-family: Verdana, Geneva, Tahoma, sans-serif;">PLAYING AT</button>
+                    <div class="scrollable-div">
+                        <p class="text" data-aos="flip-right" data-aos-duration="2000">
+                            <?= $movies["movie_details"] ?>
+                        </p>
 
-                    <p class="text" data-aos="flip-right" data-aos-duration="2000">
-                        <?= $movies["movie_details"] ?>
-                    </p>
+                    </div>
 
                 </div>
 
             </div>
-            <div class="container-fluid  text-light">
-                <table class="ajax-table table-hover table table-dark table-stripped">
+            <div class="container-fluid  text-light" style="overflow-x: auto;">
+                <table class="ajax-table table-hover table table-dark table-stripped table-responsive mx-0">
 
                 </table>
 
@@ -388,10 +509,11 @@ if (isset($_GET["movie_id"])) {
                     <div class="modal-body">
                         <input type="hidden" name="theatre" class="data_theatre">
                         <input type="hidden" name="time" class="data_time">
+                        <input type="hidden" name="date" class="data_date">
                         <input type="hidden" name="movie_id" value="<?= $movies["movie_id"] ?>" class="data_movie">
                         <!-- <div class="form-group"> -->
-                            <label for="select_ticket">Select tickets</label>
-                            <input class="form-control" type="number" id="select_ticket" name="select_ticket" min="1" max="10">
+                        <label for="select_ticket">Select tickets</label>
+                        <input class="form-control" type="number" id="select_ticket" name="select_ticket" min="1" max="10">
                         <!-- </div> -->
 
                     </div>
@@ -419,53 +541,16 @@ if (isset($_GET["movie_id"])) {
                 let time = $(this).val();
                 // console.log(time);
 
-                let theatre = $(this).closest("tr").find(".theatre").text();
+                let theatre = $(this).closest("table").closest("tr").find(".theatre").text();
+                let tanggal = $(this).closest("tr").find(".dateFilm").text();
                 // console.log(theatre);
                 //show modal
                 $("#exampleModal").find(".data_theatre").val(theatre);
                 $("#exampleModal").find(".data_time").val(time);
+                $("#exampleModal").find(".data_date").val(tanggal);
+
                 $("#exampleModal").modal("show");
             })
-            // $('.continueButton').on('click', function() {
-            //     let ticket = $("#select_ticket").val();
-            //     if (ticket <= 0 || ticket > 10) {
-                    // Toast.fire({
-                    //     icon: "error",
-                    //     title: "Please input number between 1 and 10"
-                    // })
-
-            //     } else {
-            //         let time = $(".hours").val();
-            //         let theatre = $(".theatre").text();
-            //         // console.log(ticket);
-            //         // console.log(time);
-            //         // console.log(theatre);
-            //         $.ajax({
-            //             url: "cinemaSeatPage.php",
-            //             data: {
-            //                 ticket: ticket,
-            //                 time: time,
-            //                 theatre: theatre
-            //             },
-            //             method: "POST",
-            //             success: function(data) {
-            //                 // $(".ajax-table").html(data);
-            //                 // console.log(data);
-            //                 $("#select_ticket").val("");
-            //                 // window.location.href="cinemaSeatPage.php";
-            //                 
-
-
-            //             }
-            //         })
-
-            //     }
-
-            // })
-
-
-
-
 
         })
     </script>

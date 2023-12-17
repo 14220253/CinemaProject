@@ -84,6 +84,8 @@ $nowPlaying = query("SELECT * FROM movie");
             padding-top: 133.33%;
             /* This sets the aspect ratio to 4:3. Adjust this value to get the aspect ratio you want. */
             overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform 1s;
         }
 
         .image-container img {
@@ -92,7 +94,23 @@ $nowPlaying = query("SELECT * FROM movie");
             left: 0;
             width: 100%;
             height: 100%;
+            backface-visibility: hidden;
+        }
+
+        .image-container img {
             object-fit: cover;
+        }
+        .card {
+            background: rgb(238,174,202);
+background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%); /* Change this to your desired color */
+    }
+
+
+
+        .image-container:hover {
+            /* transform: rotateY(180deg); */
+            transform: scale(0.95);
+            transition: transform .2s;
         }
     </style>
     <script src="../Partials/autoHoverBG.js"></script>
@@ -100,11 +118,46 @@ $nowPlaying = query("SELECT * FROM movie");
     <!-- AOS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
+    <!-- sweetalert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <?php
+    if (isset($_GET["confirmP"])) {
+        if ($_GET["confirmP"] == 1) {
+            echo "<script>
+                $(document).ready(function(){
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Order Success',
+                    text: 'Your ticket has been sent record',
+                    showConfirmButton: false,
+                    timer: 3000
+                })
+            });
+                </script>";
+        } else if ($_GET["confirmP"] == 0) {
+            echo "<script>
+                $(document).ready(function(){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Order Failed',
+                    text: 'Your ticket has not been sent record',
+                    showConfirmButton: false,
+                    timer: 3000
+                })
+            });
+                </script>";
+        }
+
+        $_GET["confirmP"] = "";
+    }
+    ?>
 
 
 </head>
 
-<body>
+<body style="overflow-x: hidden;">
     <section>
 
     </section>
@@ -180,32 +233,32 @@ $nowPlaying = query("SELECT * FROM movie");
 
                         <!-- The slideshow/carousel -->
                         <div class="carousel-inner">
-                            <div class="carousel-item active">
+                            <div class="carousel-item active" data-bs-interval="2000">
                                 <img src="../Assets/Endgame.jpg" alt="" class="d-block" style="width:100%">
 
                                 <div class="carousel-caption">
                                     <h4 class="pt-1 pe-2 ps-2">Avenger: Endgame</h4>
                                 </div>
                             </div>
-                            <div class="carousel-item">
+                            <div class="carousel-item" data-bs-interval="2000">
                                 <img src="../Assets/yourname.jpg" alt="" class="d-block" style="width:100%">
                                 <div class="carousel-caption">
                                     <h4 class="pt-1 pe-2 ps-2">Kimi No Na Wa</h4>
                                 </div>
                             </div>
-                            <div class="carousel-item">
+                            <div class="carousel-item" data-bs-interval="2000">
                                 <img src="../Assets/Fast9.jpg" alt="" class="d-block" style="width:100%">
                                 <div class="carousel-caption">
                                     <h4 class="pt-1 pe-2 ps-2">Fast 9</h4>
                                 </div>
                             </div>
-                            <div class="carousel-item">
+                            <div class="carousel-item" data-bs-interval="2000">
                                 <img src="../Assets/aquaman.jpeg" alt="" class="d-block" style="width:100%">
                                 <div class="carousel-caption">
                                     <h4 class="pt-1 pe-2 ps-2">Aquaman: The Lost Kingdom</h4>
                                 </div>
                             </div>
-                            <div class="carousel-item">
+                            <div class="carousel-item" data-bs-interval="2000">
                                 <img src="../Assets/transformer.jpg" alt="" class="d-block" style="width:100%">
                                 <div class="carousel-caption">
                                     <h4 class="pt-1 pe-2 ps-2">Transformer: Age Of Extinction</h4>
@@ -238,7 +291,7 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
                                 <h1 class="card-title text-uppercase text-center" style="font-size:3em; ">WELCOME @<?php echo htmlspecialchars($user["username"]) ?></h1>
                             </div>
                             <div class="card-footer">
-                                <div class="row row-cols-lg-1 row-cols-1 gy-1 row-cols-sm-2 row-cols-md-4">
+                                <div class="row row-cols-lg-1 row-cols-1 gy-1 row-cols-sm-3 row-cols-md-3">
                                     <div class="col">
                                         <a href="#" class="btn btn-dark w-100">Your Profile</a>
                                     </div>
@@ -246,20 +299,10 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
                                         <a href="#" class="btn btn-dark w-100">Your Ticket</a>
                                     </div>
                                     <div class="col">
-                                        <!-- <a href="#" class="btn btn-dark w-100">Filter Genre</a> -->
-                                        <div class="dropdown h-100">
-                                            <button type="button" class="btn btn-dark w-100 h-100 dropdown-toggle" data-bs-toggle="dropdown">
-                                                Filter Genre
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="#">Link 1</a></li>
-                                                <li><a class="dropdown-item" href="#">Link 2</a></li>
-                                                <li><a class="dropdown-item" href="#">Link 3</a></li>
-                                            </ul>
-                                        </div>
+                                        
                                     </div>
-                                    <div class="col">
-                                        <!-- <a href="#" class="btn btn-dark w-100">Filter Year</a> -->
+                                    <!-- <div class="col">
+                                        
                                         <div class="dropdown h-100">
                                             <button type="button" class="btn btn-dark w-100 h-100 dropdown-toggle text-sm-center" data-bs-toggle="dropdown">
                                                 Filter Year
@@ -270,7 +313,7 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
                                                 <li><a class="dropdown-item" href="#">Link 3</a></li>
                                             </ul>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
 
                             </div>
@@ -280,52 +323,113 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
                 </div>
             </div>
 
+
             <!-- //now playing section -->
             <h1 class="mt-5" id="nowplaying" data-aos="flip-right" data-aos-duration="2000">NOW PLAYING</h1>
             <hr class="mb-5 bg-warning">
 
+            <div class="ajax-container">
 
-            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 g-2 mb-5">
 
-                <?php foreach ($nowPlaying as $movie) : ?>
-                    <div class="col">
+                <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 g-2 mb-5">
 
-                        <!-- <div class="card">
-                    <div ></div> -->
-                        <div class="card movie-card h-100 " data-aos="zoom-in-up" data-aos-delay="300" data-aos-duration="1000">
-                            <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
-                                <div class="image-container">
-                                    <img class="card-img-top" style="object-fit: cover ;" src="data:image;base64,<?php getMovie($movie["movie_id"]) ?>" alt="<?= $movie["movie_name"] ?>">
+                    <?php foreach ($nowPlaying as $movie) : ?>
+                        <?php if ($movie["status"] == 1) : ?>
+                            <div class="col">
 
+                                <!-- <div class="card">
+    <div ></div> -->
+                                <div class="card movie-card h-100 " data-aos="zoom-in-up" data-aos-delay="300" data-aos-duration="1000">
+                                    <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
+                                        <div class="image-container">
+                                            <img class="card-img-top" style="object-fit: cover ;" src="data:image;base64,<?php getMovie($movie["movie_id"]) ?>" alt="<?= $movie["movie_name"] ?>">
+
+                                        </div>
+                                    </a>
+                                    <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
+
+                                        <div class="card-body">
+
+                                            <!-- <p class="card-text">Action, Adventure, Fantasy, Sci-fi</p> -->
+                                            <h6 class="card-title text-center text-uppercase"><b><?= $movie["movie_name"] ?></b></h6>
+
+                                        </div>
+                                    </a>
                                 </div>
-                            </a>
-                            <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
-
-                                <div class="card-body">
-
-                                    <!-- <p class="card-text">Action, Adventure, Fantasy, Sci-fi</p> -->
-                                    <h6 class="card-title text-center "><b><?= $movie["movie_name"] ?></b></h6>
-
-                                </div>
-                            </a>
-                        </div>
-                        <!-- </div> -->
-                    </div>
-                <?php endforeach; ?>
+                                <!-- </div> -->
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
 
 
 
 
+                </div>
             </div>
 
             <!-- //upcoming -->
-            <h1 class="mt-5 mb-5" id="upcoming" data-aos="flip-right" data-aos-duration="2000">UPCOMING MOVIE</h1>
+            <h1 class="mt-5 mb-2" id="upcoming" data-aos="flip-right" data-aos-duration="2000">UPCOMING MOVIE</h1>
+            <hr class="mb-5 bg-warning">
             <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 g-2 mb-5">
-                <div class="col"></div>
+                <?php foreach ($nowPlaying as $movie) : ?>
+                    <?php if ($movie["status"] == 0) : ?>
+                        <div class="col">
+
+                            <!-- <div class="card">
+                    <div ></div> -->
+                            <div class="card movie-card h-100 " data-aos="zoom-in-up" data-aos-delay="300" data-aos-duration="1000">
+                                <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
+                                    <div class="image-container">
+                                        <img class="card-img-top" style="object-fit: cover ;" src="data:image;base64,<?php getMovie($movie["movie_id"]) ?>" alt="<?= $movie["movie_name"] ?>">
+
+                                    </div>
+                                </a>
+                                <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
+
+                                    <div class="card-body">
+
+                                        <!-- <p class="card-text">Action, Adventure, Fantasy, Sci-fi</p> -->
+                                        <h6 class="card-title text-center text-uppercase"><b><?= $movie["movie_name"] ?></b></h6>
+
+                                    </div>
+                                </a>
+                            </div>
+                            <!-- </div> -->
+                        </div>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+
             </div>
 
 
-            <h1 class="mt-5 mb-5" id="theatre" data-aos="flip-right" data-aos-duration="2000">Theatre</h1>
+            <h1 class="mt-5" id="theatre" data-aos="flip-right" data-aos-duration="2000">Theatre</h1>
+            <hr class="mb-4 bg-warning">
+            <div class="bg-dark mb-5" style="overflow-y: auto;
+    height: 500px;">
+                <table class="table table-warning table-striped table-hover">
+                    <thead class="table-dark p-5" data-aos="zoom-in">
+                        <tr>
+                            <th class="h5">Theatre</th>
+                            <th class="h5">Phone-Number</th>
+                            <th class="h5">City</th>
+                        </tr>
+                    </thead>
+                    <tbody data-aos="zoom-in">
+                        <?php
+
+                        $theatre = getTheatre();
+                        foreach ($theatre as $t) :
+                        ?>
+                            <tr>
+                                <td><?= $t["theatre_name"] ?></td>
+                                <td><?= $t["phone"] ?></td>
+                                <td><?= $t["address"] ?></td>
+
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
 
@@ -475,6 +579,24 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
                 $(this).css("transition", "0.5s");
             });
         })
+    </script>
+    <script>
+        // $(document).ready(function() {
+        //     //making ajax request when dropdown is selected
+
+
+        //     $(".genre").click(function(event) {
+        //         event.preventDefault();
+        //         var genre = $(this).text();
+        //         $.get("../Partials/filterGenre.php?genre=" + genre, function(data) {
+        //             $(".ajax-container").html(data);
+        //             $(".ajax-container").find(".movie-card").attr("data-aos","zoom-in-up");
+        //             setTimeout(function() {
+        //     AOS.refresh();
+        // }, 0);
+        //         });
+        //     });
+        // });
     </script>
 </body>
 
