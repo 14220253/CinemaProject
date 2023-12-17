@@ -99,7 +99,8 @@ const buttons = document.querySelectorAll(".confeti");
 buttons.forEach((button) => {
     button.addEventListener("touchstart", () => { }, false);
     button.addEventListener("click", (e) => {
-        
+        console.log("1");
+
         button.classList.remove("pumping");
 
         // Get the position of the button

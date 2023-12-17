@@ -191,7 +191,7 @@ $nowPlaying = query("SELECT * FROM movie");
             <div class=" confeti pumping" style="position: absolute; z-index: 90;
                                         right:50%;
                                         top:20px;
-                                        cursor: pointer;"></i>
+                                        cursor: pointer;">
             </div>
         </div>
 
@@ -446,7 +446,8 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
                             <div class="card movie-card h-100 " data-aos="zoom-in-up" data-aos-delay="300" data-aos-duration="1000" style="position: relative;">
                                 <!-- <i class="bi bi-star-fill"></i> -->
                                 <p style="display: none;"><?= $movie["movie_id"] ?></p>
-
+                                <?php
+                                    if (!$guessUser) : ?>
                                 <?php
                                 $user_id = getUserID($data);
                                 $movie_id = $movie["movie_id"];
@@ -465,6 +466,7 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
                                         cursor: pointer;"><i class="bi bi-star-fill text-warning"></i>
                                     </button>
                                 <?php endif; ?>
+                            <?php endif; ?>
                                 <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
                                     <div class="image-container">
                                         <img class="card-img-top" style="object-fit: cover ;" src="data:image;base64,<?php getMovie($movie["movie_id"]) ?>" alt="<?= $movie["movie_name"] ?>">
@@ -654,67 +656,67 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
 
     <!-- AOS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init();
-    </script>
-    <script>
-        $(document).ready(function() {
-            $(".poster").hover(function() {
-                $(this).css("background-color", "rgba(0, 0, 0, 0.5)");
-                $(this).css("transition", "0.5s");
-            }, function() {
-                $(this).css("background-color", "rgba(0, 0, 0, 0)");
-                $(this).css("transition", "0.5s");
-            });
-        })
-    </script>
-
-
     <script src="../Partials/favAnimation.js"></script>
-    <script>
-        $(document).ready(function() {
-            $(document).on("click", ".fav-movie", function() {
-                var $this = $(this);
-                console.log("Button clicked");
-                $this.css('animation', 'pop 0.3s');
-                // $this.css('background-color', 'red');
+    <?php //if (!$guessUser) : ?>
+        <script>
+            // console.log("Initializing AOS...");
+            AOS.init();
+        </script>
 
 
-
-                $this.on('animationend', function() {
-                    $this.css('animation', '');
+        <script>
+            $(document).ready(function() {
+                $(".poster").hover(function() {
+                    $(this).css("background-color", "rgba(0, 0, 0, 0.5)");
+                    $(this).css("transition", "0.5s");
+                }, function() {
+                    $(this).css("background-color", "rgba(0, 0, 0, 0)");
+                    $(this).css("transition", "0.5s");
                 });
-                // if ($this.find("i").hasClass("text-warning")) {
+            })
+        </script>
 
-                // } else if ($this.find("i").hasClass("text-danger")) {
-                //     $this.find("i").removeClass("text-danger");
-                //     $this.find("i").addClass("text-warning");
-                // }
 
-                m_id = $this.siblings("p").text();
-                u_id = <?= getUserID($data) ?>;
-                $.ajax({
-                    url: "favProcess.php",
-                    method: "POST",
-                    data: {
-                        movie_id: m_id,
-                        user_id: u_id
-                    },
-                    success: function(data) {
-                        console.log(data);
-                        if (data == "insert") {
-                            $this.find("i").removeClass("text-warning");
-                            $this.find("i").addClass("text-danger");
-                        } else if (data == "delete") {
-                            $this.find("i").removeClass("text-danger");
-                            $this.find("i").addClass("text-warning");
 
+        <script>
+            $(document).ready(function() {
+                $(document).on("click", ".fav-movie", function() {
+                    var $this = $(this);
+                    console.log("Button clicked");
+                    $this.css('animation', 'pop 0.3s');
+                    // $this.css('background-color', 'red');
+
+
+
+                    $this.on('animationend', function() {
+                        $this.css('animation', '');
+                    });
+                 
+                    m_id = $this.siblings("p").text();
+                    u_id = <?= getUserID($data) ?>;
+                    $.ajax({
+                        url: "favProcess.php",
+                        method: "GET",
+                        data: {
+                            mid: m_id,
+                            uid: u_id
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            if (data == "insert") {
+                                $this.find("i").removeClass("text-warning");
+                                $this.find("i").addClass("text-danger");
+                            } else if (data == "delete") {
+                                $this.find("i").removeClass("text-danger");
+                                $this.find("i").addClass("text-warning");
+
+                            }
                         }
-                    }
-                })
+                    })
+                });
             });
-        });
-    </script>
+        </script>
+    <?php //endif ?>
 
 
 </body>

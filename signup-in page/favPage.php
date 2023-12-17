@@ -60,6 +60,7 @@ $favMovies = query($sql);
             opacity: 0.8;
 
         }
+
         .image-container {
             position: relative;
             width: 100%;
@@ -92,6 +93,9 @@ $favMovies = query($sql);
     <!-- sweetalert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <link rel="stylesheet" href="../Partials/confeti.css">
+    <script src="../Partials/favAnimation.js"></script>
+
 </head>
 
 <body style="overflow-x: hidden;">
@@ -102,6 +106,13 @@ $favMovies = query($sql);
     </div>
 
     <div class="content">
+    <div style="position: fixed; top:0px; right:50%">
+            <div class=" confeti pumping" style="position: absolute; z-index: 90;
+                                        right:50%;
+                                        top:20px;
+                                        cursor: pointer;">
+            </div>
+        </div>
         <nav class="navbar navbar-expand-lg navbar-dark text-bg-dark sticky-top" ;>
             <div class="container-fluid">
                 <a class="navbar-brand ps-3" href="index.php" style="font-weight: bold;">PCinemaU</a>
@@ -172,11 +183,11 @@ $favMovies = query($sql);
                 </div>
             </div>
         </nav>
-        <div class="container w-75 text-light">
+        <div class="container w-75 text-light" style="min-height: 400px;">
             <h1 class="text-center text-uppercase border-2 border-bottom p-4">My Favorite Movie</h1>
 
-            <table class="table table-striped table-hover">
-                <thead>
+            <table class="table table-striped table-hover table-warning">
+                <thead class="table-dark">
                     <tr>
                         <th>Movie</th>
                         <th>Info</th>
@@ -185,6 +196,7 @@ $favMovies = query($sql);
                     </tr>
                 </thead>
                 <tbody>
+                    <?php if(count($favMovies)> 0):?>
                     <?php foreach ($favMovies as $movie) : ?>
                         <tr>
                             <td class="" style="width: 15%;">
@@ -196,26 +208,147 @@ $favMovies = query($sql);
                                 </div>
                             </td>
                             <td>
-                                <h6><?= $movie["movie_name"] ?></h6>
+                                <h6 class="text-uppercase text-primary" style="font-weight: bold;"><?= $movie["movie_name"] ?></h6>
                                 <p><?= $movie["genre"] ?></p>
                             </td>
                             <td>
-                            <div style="overflow-y: auto; height: 200px;">
-                            <?= $movie["movie_details"] ?>
-                            </div>    
-                            
+                                <div style="overflow-y: auto; height: 200px;">
+                                    <? //= $movie["movie_details"] 
+                                    ?>
+                                    <div class="scrollable-div p-3">
+
+                                        <div class="row" data-aos="flip-right" data-aos-duration="2000">
+                                            <div class="col-1 label">Produser</div>
+                                            <div class="col-1" style="width: 3px;">:</div>
+                                            <div class="col"><?= $movie["produser"] ?></div>
+                                        </div>
+                                        <div class="row" data-aos="flip-right" data-aos-duration="2000">
+                                            <div class="col-1 label">Sutradara</div>
+                                            <div class="col-1" style="width: 3px;">:</div>
+                                            <div class="col"><?= $movie["sutradara"] ?></div>
+                                        </div>
+                                        <div class="row" data-aos="flip-right" data-aos-duration="2000">
+                                            <div class="col-1 label">Penulis</div>
+                                            <div class="col-1" style="width: 3px;">:</div>
+                                            <div class="col"><?= $movie["penulis"] ?></div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
                             </td>
-                            
-                            <td><a href="movieDetail.php?id=<?= $movie["movie_id"] ?>" class="btn btn-dark">Detail</a></td>
+
+                            <td>
+                            <p style="display: none;"><?=$movie["movie_id"]?></p>    
+                            <button class="confeti fav-movie btn btn-dark confeti">Delete</button></td>
                         </tr>
                     <?php endforeach; ?>
+                    <?php else:?>
+                        <tr>
+                            <td colspan="4" class="text-center h3">No Favorite Movie</td>
+                        </tr>
+                    <?php endif;?>
                 </tbody>
+
+            </table>
         </div>
+        <footer data-aos="zoom-in">
+            <div class="container-fluid bg-dark text-light p-3">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="p-2">PCinemaU</h5>
+                        <p class="p-2">PCinemaU adalah sebuah website yang menyediakan informasi film-film terkini dan terupdate</p>
+                    </div>
+                    <div class="col">
+                        <h5>Navigation</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#nowplaying">Now Playing</a></li>
+                            <li><a href="#upcoming">Upcoming</a></li>
+                            <li><a href="#">Theatre</a></li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <h5>Our Social Media</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#">Instagram</a></li>
+                            <li><a href="#">Twitter</a></li>
+                            <li><a href="#">Facebook</a></li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <h5>Our Partner</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#">Cinema 21</a></li>
+                            <li><a href="#">XXI</a></li>
+                            <li><a href="#">CGV</a></li>
+                            <li><a href="#">Cinepolis</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
 
 
 
     </div>
 
+    <!-- AOS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../Partials/favAnimation.js"></script>
+    <?php //if (!$guessUser) : 
+    ?>
+    <script>
+        // console.log("Initializing AOS...");
+        AOS.init();
+    </script>
+
+
+    <script>
+        $(document).ready(function() {
+            $(".poster").hover(function() {
+                $(this).css("background-color", "rgba(0, 0, 0, 0.5)");
+                $(this).css("transition", "0.5s");
+            }, function() {
+                $(this).css("background-color", "rgba(0, 0, 0, 0)");
+                $(this).css("transition", "0.5s");
+            });
+        })
+    </script>
+
+
+
+    <script>
+        $(document).ready(function() {
+            $(document).on("click", ".fav-movie", function() {
+                var $this = $(this);
+                console.log("Button clicked");
+                $this.css('animation', 'pop 0.3s');
+                // $this.css('background-color', 'red');
+
+
+
+                $this.on('animationend', function() {
+                    $this.css('animation', '');
+                });
+
+                m_id = $this.siblings("p").text();
+                u_id = <?= getUserID($data) ?>;
+                $.ajax({
+                    url: "favProcess.php",
+                    method: "GET",
+                    data: {
+                        mid: m_id,
+                        uid: u_id
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        window.location.reload();
+                    }
+                })
+            });
+        });
+    </script>
 
 </body>
 

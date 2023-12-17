@@ -1,10 +1,4 @@
 <?php
-
-require "database.php";
-
-session_start();
-
-
 if (isset($_GET["uid"]) && isset($_GET["mid"])) {
     $user_id = $_GET["uid"];
     $movie_id = $_GET["mid"];
@@ -29,5 +23,7 @@ if (isset($_GET["uid"]) && isset($_GET["mid"])) {
         echo "delete";
     }
 }
+
+
 
 ?>
