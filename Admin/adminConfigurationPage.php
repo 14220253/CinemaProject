@@ -6,6 +6,11 @@ session_start();
 require_once('adminHandler.php');
 require_once('movieHandler.php');
 
+if (!isset($_SESSION['user'])) {
+    header("Location: adminLogin.php"); 
+    exit();
+}
+
 $adminHandler = new AdminHandler();
 $movieHandler = new MovieHandler();
 if(isset($_POST['add_submit'])){
@@ -25,7 +30,7 @@ if(isset($_POST['add_submit'])){
     } else {
         echo "<script>alert('Don\\'t leave the input field empty');</script>"; // Escaped the single quote
     }
-}if (isset($_POST['edit_submit'])) {
+}else if (isset($_POST['edit_submit'])) {
     // Ensure all required fields are set
     if (isset($_POST['edit_NIP'], $_POST['edit_nama'], $_POST['new_password'], $_POST['edit_kontak'], $_POST['old_password'])) {
         $NIP = $_POST['edit_NIP'];
@@ -91,6 +96,8 @@ else if(isset($_POST['add_movie_submit'])){
 
     }
 }
+
+
 ?>
 
 
@@ -105,7 +112,23 @@ else if(isset($_POST['add_movie_submit'])){
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap">
-
+<script>
+        function showTransaction(str) {
+            if (str == "") {
+                document.getElementById("showHere").innerHTML = "";
+                return;
+            } else {
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("showHere").innerHTML = this.responseText;
+                    }
+                };
+                xmlhttp.open("GET","getTransaction.php?q="+str,true);
+                xmlhttp.send();
+            }
+        }
+    </script>
     <style>
         body {
             font-family: 'Roboto Mono', monospace;
@@ -225,7 +248,7 @@ else if(isset($_POST['add_movie_submit'])){
             <div id="transactionMenu" class="card-body navigation bg-dark text-warning d-none">
                 <h5 class="card-title">Transaction History</h5>
                 <p class="card-text">See customer's transaction history</p>
-                <a href="#" id ="transactionButton" class="btn btn-dark text-warning border border-warning">Continue</a>
+                <button id ="transactionButton" class="btn btn-dark text-warning border border-warning">Continue</button>
             </div>
         </div>
     </div>
@@ -430,9 +453,14 @@ else if(isset($_POST['add_movie_submit'])){
                     </div>                  
                 </div>
                     <div class="card-footer bg-warning">
-                        <button class = "btn btn-dark" type="submit" name="submit" id="submit"><a class="text-warning" style="text-decoration:none; color:black;" href="#">Confirm</a></button>
+                        <button class = "btn btn-dark" type="submit" name="transaction_submit" id="submit" onclick="showTransaction($('#customer_id').val())">Confirm</button>
                     </div>
                 </form>
+                <div id="showHere">
+
+                </div>
+
+            </div>
         </div>
     </div>
     <div id= "resetSeatContext" class="container-fluid d-none menuContext">

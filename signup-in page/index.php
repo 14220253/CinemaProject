@@ -100,10 +100,12 @@ $nowPlaying = query("SELECT * FROM movie");
         .image-container img {
             object-fit: cover;
         }
+
         .card {
-            background: rgb(238,174,202);
-background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%); /* Change this to your desired color */
-    }
+            background: rgb(238, 174, 202);
+            background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
+            /* Change this to your desired color */
+        }
 
 
 
@@ -112,9 +114,25 @@ background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 
             transform: scale(0.95);
             transition: transform .2s;
         }
+
+        @keyframes pop {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+
+        }
     </style>
     <script src="../Partials/autoHoverBG.js"></script>
     <link rel="stylesheet" href="../Partials/general.css">
+    <link rel="stylesheet" href="../Partials/confeti.css">
     <!-- AOS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
@@ -166,22 +184,30 @@ background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 
 
     <div class="content">
 
+        <div style="position: fixed; top:0px; right:50%">
+            <div class=" confeti pumping" style="position: absolute; z-index: 90;
+                                        right:50%;
+                                        top:20px;
+                                        cursor: pointer;"></i>
+            </div>
+        </div>
+
         <nav class="navbar navbar-expand-lg navbar-dark text-bg-dark sticky-top" ;>
             <div class="container-fluid">
-                <a class="navbar-brand ps-3" href="#" style="font-weight: bold;">PCinemaU</a>
+                <a class="navbar-brand ps-3" href="index.php" style="font-weight: bold;">PCinemaU</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="#nowplaying"><i class="bi bi-camera-reels-fill"></i> Now Playing</a>
+                            <a class="nav-link" aria-current="page" href="index.php#nowplaying"><i class="bi bi-camera-reels-fill"></i> Now Playing</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#upcoming"><i class="bi bi-film"></i> Upcoming</a>
+                            <a class="nav-link" href="index.php#upcoming"><i class="bi bi-film"></i> Upcoming</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#theatre"><i class="bi bi-geo-alt-fill"></i> Theatre</a>
+                            <a class="nav-link" href="index.php#theatre"><i class="bi bi-geo-alt-fill"></i> Theatre</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="true">
@@ -291,29 +317,21 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
                                 <h1 class="card-title text-uppercase text-center" style="font-size:3em; ">WELCOME @<?php echo htmlspecialchars($user["username"]) ?></h1>
                             </div>
                             <div class="card-footer">
-                                <div class="row row-cols-lg-1 row-cols-1 gy-1 row-cols-sm-3 row-cols-md-3">
+                                <div class="row row-cols-lg-1 row-cols-1 gy-1 row-cols-sm-2 row-cols-md-2">
                                     <div class="col">
                                         <a href="profile-page.php" class="btn btn-dark w-100">Your Profile</a>
                                     </div>
                                     <div class="col">
-                                        <a href="#" class="btn btn-dark w-100">Your Ticket</a>
+                                        <a href="profileedit-page.php" class="w-100 btn btn-dark edit">Edit Profile</a>
+
                                     </div>
                                     <div class="col">
-                                        
+                                        <a href="#" class="btn btn-dark w-100">Favorite</a>
                                     </div>
-                                    <!-- <div class="col">
-                                        
-                                        <div class="dropdown h-100">
-                                            <button type="button" class="btn btn-dark w-100 h-100 dropdown-toggle text-sm-center" data-bs-toggle="dropdown">
-                                                Filter Year
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="#">Link 1</a></li>
-                                                <li><a class="dropdown-item" href="#">Link 2</a></li>
-                                                <li><a class="dropdown-item" href="#">Link 3</a></li>
-                                            </ul>
-                                        </div>
-                                    </div> -->
+                                    <div class="col">
+                                        <a href="changepassword-page.php" class=" w-100 btn btn-dark change">Change Password</a>
+
+                                    </div>
                                 </div>
 
                             </div>
@@ -326,26 +344,32 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
 
             <!-- //now playing section -->
             <h1 class="mt-5" id="nowplaying" data-aos="flip-right" data-aos-duration="2000">NOW PLAYING</h1>
-            <hr class="mb-5 bg-warning">
+            <hr class="mb-4 bg-warning">
 
             <div class="ajax-container">
-
-
                 <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 g-2 mb-5">
 
                     <?php foreach ($nowPlaying as $movie) : ?>
                         <?php if ($movie["status"] == 1) : ?>
-                            <div class="col">
+                            <div class="col g-3">
 
                                 <!-- <div class="card">
+                                    
     <div ></div> -->
-                                <div class="card movie-card h-100 " data-aos="zoom-in-up" data-aos-delay="300" data-aos-duration="1000">
-                                    <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
-                                        <div class="image-container">
-                                            <img class="card-img-top" style="object-fit: cover ;" src="data:image;base64,<?php getMovie($movie["movie_id"]) ?>" alt="<?= $movie["movie_name"] ?>">
+                                <div class="card movie-card h-100 " data-aos="zoom-in-up" data-aos-delay="300" data-aos-duration="1000" style="position: relative;">
+                                    <button class="btn btn-dark fav-movie confeti pumping" style="position: absolute;z-index: 90;
+                                        top: 10px;
+                                        right: 10px;
+                                        cursor: pointer;"><i class="bi bi-star-fill text-warning"></i>
+                                    </button>
 
-                                        </div>
-                                    </a>
+                                    <div class="image-container">
+
+                                        <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
+                                            <img class="card-img-top" style="object-fit: cover ;" src="data:image;base64,<?php getMovie($movie["movie_id"]) ?>" alt="<?= $movie["movie_name"] ?>">
+                                        </a>
+                                    </div>
+
                                     <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
 
                                         <div class="card-body">
@@ -377,7 +401,13 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
 
                             <!-- <div class="card">
                     <div ></div> -->
-                            <div class="card movie-card h-100 " data-aos="zoom-in-up" data-aos-delay="300" data-aos-duration="1000">
+                            <div class="card movie-card h-100 " data-aos="zoom-in-up" data-aos-delay="300" data-aos-duration="1000" style="position: relative;">
+                                <!-- <i class="bi bi-star-fill"></i> -->
+                                <button class="btn btn-dark fav-movie confeti pumping" style="position: absolute;z-index: 90;
+                                        top: 10px;
+                                        right: 10px;
+                                        cursor: pointer;"><i class="bi bi-star-fill text-warning"></i>
+                                </button>
                                 <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
                                     <div class="image-container">
                                         <img class="card-img-top" style="object-fit: cover ;" src="data:image;base64,<?php getMovie($movie["movie_id"]) ?>" alt="<?= $movie["movie_name"] ?>">
@@ -390,6 +420,7 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
 
                                         <!-- <p class="card-text">Action, Adventure, Fantasy, Sci-fi</p> -->
                                         <h6 class="card-title text-center text-uppercase"><b><?= $movie["movie_name"] ?></b></h6>
+
 
                                     </div>
                                 </a>
@@ -580,24 +611,23 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
             });
         })
     </script>
+
+
+    <script src="../Partials/favAnimation.js"></script>
     <script>
-        // $(document).ready(function() {
-        //     //making ajax request when dropdown is selected
+        $(document).ready(function() {
+            $(document).on("click", ".fav-movie", function() {
+                var $this = $(this);
+                $this.css('animation', 'pop 0.5s');
 
-
-        //     $(".genre").click(function(event) {
-        //         event.preventDefault();
-        //         var genre = $(this).text();
-        //         $.get("../Partials/filterGenre.php?genre=" + genre, function(data) {
-        //             $(".ajax-container").html(data);
-        //             $(".ajax-container").find(".movie-card").attr("data-aos","zoom-in-up");
-        //             setTimeout(function() {
-        //     AOS.refresh();
-        // }, 0);
-        //         });
-        //     });
-        // });
+                $this.on('animationend', function() {
+                    $this.css('animation', '');
+                });
+            });
+        });
     </script>
+
+
 </body>
 
 </html>

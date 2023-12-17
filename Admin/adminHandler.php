@@ -29,6 +29,7 @@ class AdminHandler extends Database {
     
         // Verify old password
         if (!password_verify($old_password, $hashedPasswordFromDB)) {
+            echo password_verify($old_password, $hashedPasswordFromDB);
             return false;
         }
     

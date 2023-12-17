@@ -192,7 +192,9 @@ $seatStatus = array(
                 });
             });
             $("#toastCloseButton").click(function() {
+                console.log((".tanggalTayang").html());
                 $("#warningToast").hide();
+
             });
             $(".strongConfirmButton").click(function() {
                 for (let i = 0; i < data.length; i++) {
@@ -223,6 +225,7 @@ $seatStatus = array(
                         date : $(".tanggalTayang").html(),
                         selectedSeats: seatsToSend,
                         time : $(".waktuTayang").html()
+                        
                     },
                     // dataType: 'json',
                     success: function(data) {
