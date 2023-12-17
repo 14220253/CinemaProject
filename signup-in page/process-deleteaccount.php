@@ -22,7 +22,7 @@ if (empty($errors)) {
     try {
         if ($mysqli->query($sql)) {
             session_destroy();
-            header("Location: /profile-page.php");
+            header("Location: profile-page.php");
             // Rest of your code
         } else {
             die($mysqli->error . " " . $mysqli->errno);

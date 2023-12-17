@@ -90,6 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <title>PCinemaU</title>
+    <link rel="icon" type="image/png" href="../Partials/favIcon.png">
     <link rel="stylesheet" href="../signup-in page/style.css">
     <link rel="stylesheet" href="../Partials/general.css">
     <!-- jquery -->

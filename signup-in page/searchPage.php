@@ -124,6 +124,8 @@ if ($_GET["genre"] == "All") {
 
     <!-- sweetalert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>PCinemaU</title>
+    <link rel="icon" type="image/png" href="../Partials/favIcon.png">
 
 
 

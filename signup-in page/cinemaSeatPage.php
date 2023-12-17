@@ -131,7 +131,8 @@ $seatStatus = array(
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>PCinemaU</title>
+    <link rel="icon" type="image/png" href="../Partials/favIcon.png">
     <?php require_once "../Partials/header.php" ?>
     <!-- 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -400,6 +401,37 @@ $seatStatus = array(
             height: 100%;
             object-fit: cover;
         }
+        .scrollable-div {
+            overflow: auto;
+            /* height: 250px; */
+        }
+
+        /* For Firefox */
+        .scrollable-div {
+            scrollbar-width: thin;
+        }
+
+        /* For Internet Explorer and Edge */
+        .scrollable-div {
+            -ms-overflow-style: none;
+        }
+
+        /* For Chrome, Safari and Opera */
+        .scrollable-div::-webkit-scrollbar {
+            width: 2px;
+        }
+
+        .scrollable-div::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .scrollable-div::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+
+        .scrollable-div::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
     </style>
 
     <link rel="stylesheet" href="../Partials/general.css">
@@ -413,7 +445,7 @@ $seatStatus = array(
 
     <!-- <div class="content"> -->
 
-    <div id="confirmModal" class="modal" tabindex="-1" style="color:white;">
+    <div id="confirmModal" class="scrollable-div modal" tabindex="-1" style="color:white;">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">

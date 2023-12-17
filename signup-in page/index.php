@@ -172,6 +172,9 @@ $nowPlaying = query("SELECT * FROM movie");
     }
     ?>
 
+    <title>PCinemaU</title>
+    <link rel="icon" type="image/png" href="../Partials/favIcon.png">
+
 
 </head>
 
@@ -224,14 +227,40 @@ $nowPlaying = query("SELECT * FROM movie");
                                     <li><a class="dropdown-item" href="../signup-in page/signup-page.php">Sign Up</a></li>
                                 <?php endif; ?>
 
-                                
+
                             </ul>
                         </li>
-                        
+
                     </ul>
-                    <form class="d-flex">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-secondary" type="submit">Search</button>
+                    <form class="d-flex" method="get" action="searchPage.php">
+                        <select class="form-select w-75 me-2" name="genre">
+
+                            <option><span class="dropdown-item genre">All</span></option>
+                            <?php
+                            $movieGenres = [
+                                "Action",
+                                "Comedy",
+                                "Drama",
+                                "Sci-Fi",
+                                "Horror",
+                                "Romance",
+                                "Thriller",
+                                "Adventure",
+                                "Animation",
+                                "Fantasy",
+                                "Crime",
+                                "Family"
+                            ];
+
+                            foreach ($movieGenres as $genre) : ?>
+                                <option><span class="dropdown-item genre"><?= $genre ?></span></option>
+                            <?php endforeach;
+                            ?>
+
+
+                        </select>
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="key">
+                        <button class="btn btn-outline-secondary" type="submit" name="search">Search</button>
                     </form>
                 </div>
             </div>
@@ -352,11 +381,26 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
                                     
     <div ></div> -->
                                 <div class="card movie-card h-100 " data-aos="zoom-in-up" data-aos-delay="300" data-aos-duration="1000" style="position: relative;">
-                                    <button class="btn btn-dark fav-movie confeti pumping" style="position: absolute;z-index: 90;
+                                    <p style="display: none;"><?= $movie["movie_id"] ?></p>
+
+                                    <?php
+                                    $user_id = getUserID($data);
+                                    $movie_id = $movie["movie_id"];
+                                    if (checkFav($movie_id, $user_id)) :
+                                    ?>
+                                        <button class="btn btn-dark fav-movie confeti pumping" style="position: absolute;z-index: 90;
+                                        top: 10px;
+                                        right: 10px;
+                                        cursor: pointer;"><i class="bi bi-star-fill text-danger"></i>
+                                        </button>
+                                    <?php else : ?>
+
+                                        <button class="btn btn-dark fav-movie confeti pumping" style="position: absolute;z-index: 90;
                                         top: 10px;
                                         right: 10px;
                                         cursor: pointer;"><i class="bi bi-star-fill text-warning"></i>
-                                    </button>
+                                        </button>
+                                    <?php endif; ?>
 
                                     <div class="image-container">
 
@@ -398,11 +442,26 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
                     <div ></div> -->
                             <div class="card movie-card h-100 " data-aos="zoom-in-up" data-aos-delay="300" data-aos-duration="1000" style="position: relative;">
                                 <!-- <i class="bi bi-star-fill"></i> -->
-                                <button class="btn btn-dark fav-movie confeti pumping" style="position: absolute;z-index: 90;
+                                <p style="display: none;"><?= $movie["movie_id"] ?></p>
+
+                                <?php
+                                $user_id = getUserID($data);
+                                $movie_id = $movie["movie_id"];
+                                if (checkFav($movie_id, $user_id)) :
+                                ?>
+                                    <button class="btn btn-dark fav-movie confeti pumping" style="position: absolute;z-index: 90;
+                                        top: 10px;
+                                        right: 10px;
+                                        cursor: pointer;"><i class="bi bi-star-fill text-danger"></i>
+                                    </button>
+                                <?php else : ?>
+
+                                    <button class="btn btn-dark fav-movie confeti pumping" style="position: absolute;z-index: 90;
                                         top: 10px;
                                         right: 10px;
                                         cursor: pointer;"><i class="bi bi-star-fill text-warning"></i>
-                                </button>
+                                    </button>
+                                <?php endif; ?>
                                 <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
                                     <div class="image-container">
                                         <img class="card-img-top" style="object-fit: cover ;" src="data:image;base64,<?php getMovie($movie["movie_id"]) ?>" alt="<?= $movie["movie_name"] ?>">
@@ -613,11 +672,43 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
         $(document).ready(function() {
             $(document).on("click", ".fav-movie", function() {
                 var $this = $(this);
-                $this.css('animation', 'pop 0.5s');
+                console.log("Button clicked");
+                $this.css('animation', 'pop 0.3s');
+                // $this.css('background-color', 'red');
+
+
 
                 $this.on('animationend', function() {
                     $this.css('animation', '');
                 });
+                // if ($this.find("i").hasClass("text-warning")) {
+
+                // } else if ($this.find("i").hasClass("text-danger")) {
+                //     $this.find("i").removeClass("text-danger");
+                //     $this.find("i").addClass("text-warning");
+                // }
+
+                m_id = $this.siblings("p").text();
+                u_id = <?= getUserID($data) ?>;
+                $.ajax({
+                    url: "favProcess.php",
+                    method: "POST",
+                    data: {
+                        movie_id: m_id,
+                        user_id: u_id
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data == "insert") {
+                            $this.find("i").removeClass("text-warning");
+                            $this.find("i").addClass("text-danger");
+                        } else if (data == "delete") {
+                            $this.find("i").removeClass("text-danger");
+                            $this.find("i").addClass("text-warning");
+
+                        }
+                    }
+                })
             });
         });
     </script>

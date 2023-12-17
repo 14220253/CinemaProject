@@ -26,6 +26,7 @@ if (isset($_SESSION["login"])) {
 <head>
   <meta charset="UTF-8">
   <title>PCinemaU</title>
+  <link rel="icon" type="image/png" href="../Partials/favIcon.png">
 
   <!-- background -->
   

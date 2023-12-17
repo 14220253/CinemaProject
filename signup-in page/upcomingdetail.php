@@ -39,7 +39,8 @@ if (isset($_GET["movie_id"])) {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Movie Detail</title>
+    <title>PCinemaU</title>
+    <link rel="icon" type="image/png" href="../Partials/favIcon.png">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- 
@@ -299,11 +300,35 @@ if (isset($_GET["movie_id"])) {
                         </li>
                         
                     </ul>
-                    <form class="d-flex">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                        <button class="btn btn-outline-secondary" type="submit">
-                            Search
-                        </button>
+                    <form class="d-flex" method="get" action="searchPage.php">
+                        <select class="form-select w-75 me-2" name="genre">
+
+                            <option><span class="dropdown-item genre">All</span></option>
+                            <?php
+                            $movieGenres = [
+                                "Action",
+                                "Comedy",
+                                "Drama",
+                                "Sci-Fi",
+                                "Horror",
+                                "Romance",
+                                "Thriller",
+                                "Adventure",
+                                "Animation",
+                                "Fantasy",
+                                "Crime",
+                                "Family"
+                            ];
+
+                            foreach ($movieGenres as $genre) : ?>
+                                <option><span class="dropdown-item genre"><?= $genre ?></span></option>
+                            <?php endforeach;
+                            ?>
+
+
+                        </select>
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="key">
+                        <button class="btn btn-outline-secondary" type="submit" name="search">Search</button>
                     </form>
                 </div>
             </div>

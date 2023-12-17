@@ -92,5 +92,26 @@ function getUserID ($username) {
 }
 
 
+function getMovieID ($movie_name) {
+    global $mysqli;
+    $query = "SELECT movie_id FROM movie WHERE movie_name = '$movie_name'";
+    $result = mysqli_query($mysqli, $query);
+    $row = mysqli_fetch_assoc($result);
+    return $row["movie_id"];
+}
+
+function checkFav ($movie_id, $user_id) {
+    global $mysqli;
+    $query = "SELECT * FROM fav_movie WHERE movie_id = $movie_id AND user_id = $user_id";
+    $result = mysqli_query($mysqli, $query);
+    $row = mysqli_fetch_assoc($result);
+    if ($row) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
 
 ?>
