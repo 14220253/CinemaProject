@@ -527,17 +527,10 @@ $seatStatus = array(
                                     </li>
                                 <?php endif; ?>
 
-                                <li>
-                                    <hr class="dropdown-divider" />
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                </li>
+                            
                             </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                        </li>
+                       
                     </ul>
                     <form style="padding-right: 10px;">
                         <a href="upcomingdetail.php?movie_id=<?= $movie_id ?>" class="btn btn-outline-danger" type="Cancel" style="color:rgb(244, 205, 205)">Cancel</a>
