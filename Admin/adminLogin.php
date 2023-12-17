@@ -118,12 +118,10 @@ if (isset($_SESSION['user'])) {
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="passwordIcon"><i class="bi bi-lock-fill"></i></span>
                         <input name = "password" id="passwordField" type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="passwordIcon">
-                        <span class="input-group-text"><button id="toggleEyeButton" style="border-style:none;"><i class="bi bi-eye-slash" id="togglePassword"></i></button></span>
                     </div>
                     <div>
                         <p>Forgot Password ?</p>
                         <p>Contact your supervisor</p>
-                      
                     </div>
                   </div>
                 <div class="card-footer">

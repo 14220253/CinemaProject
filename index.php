@@ -1,4 +1,4 @@
 <?php
-    header("Location: /signup-in page/index.php");
+    header("Location: signup-in page/index.php");
 
 ?>

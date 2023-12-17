@@ -350,7 +350,7 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
 
                                     </div>
                                     <div class="col">
-                                        <a href="#" class="btn btn-dark w-100">Favorite</a>
+                                        <a href="favPage.php" class="btn btn-dark w-100">Favorite</a>
                                     </div>
                                     <div class="col">
                                         <a href="changepassword-page.php" class=" w-100 btn btn-dark change">Change Password</a>
@@ -382,24 +382,27 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
     <div ></div> -->
                                 <div class="card movie-card h-100 " data-aos="zoom-in-up" data-aos-delay="300" data-aos-duration="1000" style="position: relative;">
                                     <p style="display: none;"><?= $movie["movie_id"] ?></p>
-
                                     <?php
-                                    $user_id = getUserID($data);
-                                    $movie_id = $movie["movie_id"];
-                                    if (checkFav($movie_id, $user_id)) :
-                                    ?>
-                                        <button class="btn btn-dark fav-movie confeti pumping" style="position: absolute;z-index: 90;
+                                    if (!$guessUser) : ?>
+
+                                        <?php
+                                        $user_id = getUserID($data);
+                                        $movie_id = $movie["movie_id"];
+                                        if (checkFav($movie_id, $user_id)) :
+                                        ?>
+                                            <button class="btn btn-dark fav-movie confeti pumping" style="position: absolute;z-index: 90;
                                         top: 10px;
                                         right: 10px;
                                         cursor: pointer;"><i class="bi bi-star-fill text-danger"></i>
-                                        </button>
-                                    <?php else : ?>
+                                            </button>
+                                        <?php else : ?>
 
-                                        <button class="btn btn-dark fav-movie confeti pumping" style="position: absolute;z-index: 90;
+                                            <button class="btn btn-dark fav-movie confeti pumping" style="position: absolute;z-index: 90;
                                         top: 10px;
                                         right: 10px;
                                         cursor: pointer;"><i class="bi bi-star-fill text-warning"></i>
-                                        </button>
+                                            </button>
+                                        <?php endif; ?>
                                     <?php endif; ?>
 
                                     <div class="image-container">

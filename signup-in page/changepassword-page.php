@@ -16,7 +16,7 @@ if (isset($_SESSION["login"])) {
     $_SESSION["pass"] = $user["password"];
 } else {
     $guessUser = true;
-    header("Location: /signup-in page/signin-page.php");
+    header("Location: signin-page.php");
 }
 
 

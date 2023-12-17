@@ -1,3 +1,24 @@
+<?php
+session_start();
+require __DIR__ . "/database.php";
+$guessUser = false;
+if (isset($_SESSION["login"])) {
+
+    $data = $_SESSION["username"];
+
+    $sql = "SELECT * FROM customer WHERE username = '$data'";
+
+    $result = $mysqli->query($sql);
+    $user = $result->fetch_assoc();
+
+    $guessUser = false;
+} else {
+    $guessUser = true;
+    header("Location: signin-page.php");
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

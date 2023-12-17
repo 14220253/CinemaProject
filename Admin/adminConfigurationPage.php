@@ -1,7 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 session_start();
 require_once('adminHandler.php');
 require_once('movieHandler.php');
@@ -20,10 +17,14 @@ if(isset($_POST['add_submit'])){
         $password = $_POST['password'];
         $kontak = $_POST['kontak'];
         $fk_location_id = $_POST['fk_location_id'];
+        $confirmPassword = $_POST['confirmPassword'];
         $condition = $adminHandler->addAdmin($NIP, $password, $nama, $kontak, $fk_location_id);
         if($condition == false){
             echo "<script>alert('Error adding admin');</script>";
-        } else{
+        } else if($confirmPassword != $password){
+            echo "<script>alert('Confirm Password and Password don't match');</script>";
+
+        }else{
             echo "<script>alert('Success');</script>";
 
         }
@@ -66,9 +67,10 @@ else if(isset($_POST['add_movie_submit'])){
         $fk_supplier_id = $_POST['fk_supplier_id'];
         $movie_id = $_POST['movie_id'];
         $movie_details = $_POST['movie_details'];
+
         $condition = $movieHandler->addMovie($movie_id, $movie_name,$genre, $trailer, $fk_supplier_id, $movie_length, $movie_details,$produser,$sutradara, $penulis, $cast, $movie_image, $status);
-        if($condition == false){
-            echo "<script>alert('Error adding movie');</script>";
+        if($condition){
+            echo "<script>alert('Error');</script>";
         } else{
             echo "<script>alert('Success');</script>";
         }
@@ -76,16 +78,17 @@ else if(isset($_POST['add_movie_submit'])){
         echo "<script>alert('Don\\'t leave the input field empty');</script>"; // Escaped the single quote
     }
 }else if(isset($_POST['delete_movie_submit'])){
-    if(isset($_POST['movie_name']) && isset($_POST['movie_id'])){
+    if(isset($_POST['movie_name']) && isset($_POST['movie_id']) && (!empty($_POST['movie_name']) || !empty($_POST['movie_name']))){
         $movie_id = $_POST['movie_id'];
         $movie_name = $_POST['movie_name'];
         $condition = $movieHandler->deleteMovie($movie_id, $movie_name);
-        if($condition == false){
-            echo "<script>alert('Error deleting movie');</script>";
-        } else{
+        if($condition){
             echo "<script>alert('Success');</script>";
-
+        } else{
+            echo "<script>alert('Error');</script>";
         }
+    }else{
+        echo "<script>alert('Don\\'t leave the input field empty');</script>"; // Escaped the single quote
     }
 }else if(isset($_POST['reset_submit'])){
     $condition = $movieHandler->resetSeat();
@@ -95,6 +98,11 @@ else if(isset($_POST['add_movie_submit'])){
         echo "<script>alert('Success');</script>";
 
     }
+}else if(isset($_POST['logOut'])){
+    session_start();
+    session_unset();
+    session_destroy();
+    header('Location:adminLogin.php');
 }
 
 
@@ -112,7 +120,7 @@ else if(isset($_POST['add_movie_submit'])){
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap">
-<script>
+    <script>
         function showTransaction(str) {
             if (str == "") {
                 document.getElementById("showHere").innerHTML = "";
@@ -218,6 +226,10 @@ else if(isset($_POST['add_movie_submit'])){
                     <li class="nav-item">
                         <a class="nav-link text-warning-emphasis" href="#transactionMenu">See Transaction</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-warning-emphasis" href="#logOut">Logout</a>
+                    </li>
+                    
                 </ul>
             </div>
             <div id="addAdminMenu" class="card-body navigation bg-dark text-warning">
@@ -250,6 +262,13 @@ else if(isset($_POST['add_movie_submit'])){
                 <p class="card-text">See customer's transaction history</p>
                 <button id ="transactionButton" class="btn btn-dark text-warning border border-warning">Continue</button>
             </div>
+            <div id="logOut" class="card-body navigation bg-dark text-warning d-none">
+                <h5 class="card-title">LogOut</h5>
+                <p class="card-text">Are You Sure?</p>
+                <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>">
+                    <button name ="logOut" id ="logOutButton" class="btn btn-dark text-warning border border-warning">Yes</button>
+                </form>
+            </div>
         </div>
     </div>
     <div id="addAdminMenuContext" class="container-fluid d-none menuContext">
@@ -263,7 +282,7 @@ else if(isset($_POST['add_movie_submit'])){
             <div class="card-body">
                 <h5 class="card-title">Who Are You?</h5>
                 <p class="card-text">Please fill with correct data and information.</p>
-                <form method = "post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])?>" style="text-align: start;">
+                <form method = "post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>" style="text-align: start;">
                     <div class="form-group text-warning">
                         <label>NIP</label>
                         <input class="form-control focus-ring focus-ring-warning" type="text" id ="NIP" name="NIP">
@@ -306,7 +325,7 @@ else if(isset($_POST['add_movie_submit'])){
             <div class="card-body">
                 <h5 class="card-title">Personalize your profile</h5>
                 <p class="card-text">You can't change your NIP and ID Lokasi Tugas.</p>
-                <form method = "post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])?>" style="text-align: start;">
+                <form method = "post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>" style="text-align: start;">
                     <p class="card-text"><strong>Initial Data :</strong></p>
                     <div class="form-group text-warning">
                         <label>NIP</label>
@@ -348,7 +367,7 @@ else if(isset($_POST['add_movie_submit'])){
             <div class="card-body">
                 <h5 class="card-title">What's Playing?</h5>
                 <p class="card-text">Please fill with correct data and information.</p>
-                <form method = "post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])?>" style="text-align: start;">
+                <form method = "post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>" style="text-align: start;">
                     <div class="form-group text-warning">
                         <label>Movie Name</label>
                         <input class="form-control focus-ring focus-ring-warning" type="text" id ="add_movie_name" name="movie_name">
@@ -419,7 +438,7 @@ else if(isset($_POST['add_movie_submit'])){
             <div class="card-body">
                 <h5 class="card-title">Expired or Canceled Movie Data </h5>
                 <p class="card-text">Movie that has been deleted will be removed from now playing page, upcoming movies page, and database</p>
-                <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])?>"  style="text-align: start;">
+                <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>"  style="text-align: start;">
                     <div class="form-group text-warning">
                         <label>Movie Id</label>
                         <input class="form-control focus-ring focus-ring-warning" type="text" id ="movie_id" name="movie_id">
@@ -453,13 +472,12 @@ else if(isset($_POST['add_movie_submit'])){
                     </div>                  
                 </div>
                     <div class="card-footer bg-warning">
-                        <button class = "btn btn-dark" type="submit" name="transaction_submit" id="submit" onclick="showTransaction($('#customer_id').val())">Confirm</button>
+                        <button class = "btn btn-dark" type="button" name="transaction_submit" id="submit" onclick="showTransaction($('#customer_id').val())">Confirm</button>
                     </div>
                 </form>
                 <div id="showHere">
 
                 </div>
-
             </div>
         </div>
     </div>
