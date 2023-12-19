@@ -207,7 +207,6 @@ $historys = query($sql);
                     <div class="stats p-1">
                         <a href="profileedit-page.php" class="my-2 w-100 btn btn-outline-info edit"><b>Edit Profile</b></a>
                         <a href="changepassword-page.php" class="my-2 w-100 btn btn-outline-warning change"><b>Change Password</b></a> 
-                        <a href="deleteaccount-page.php" class="my-2 w-100 btn btn-outline-danger delete"><b>Delete Account</b></a>
                         <a class="btn btn-outline-success w-100 my-2" href="index.php"><b>Back</b></a>
                     </div>
                 </div>
