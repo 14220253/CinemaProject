@@ -202,11 +202,15 @@ if (isset($_SESSION["login"])) {
             <input id="password" type="password" name="password" placeholder ="password" required value="<?php echo htmlspecialchars($form_data["password"] ?? '') ?>">
             
           </div>
-          <div class="warning" style="display:none; color:red">
+          <div class="links">
+            
+            <!-- <a href="pcucinemasiginpage.html">Sign in</a> -->
+            <a href="profile-page.php" style="color: aqua; font-weight: bold;"><< back</a> <!--ini signin pageku-->
           </div>
           <div class="inputBox">
             <!-- <button>Confirm</button> -->
             <input class="submitButton" type="submit" name="register" value="Confirm">
+            
           </div>
         </form>
       </div>

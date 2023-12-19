@@ -85,9 +85,9 @@ document.addEventListener('click', function (e) {
         });
     }
 });
-let intervalTimer = setInterval(() => {
-    animateParticles({ total: 10 })
-}, 100)
+// let intervalTimer = setInterval(() => {
+//     animateParticles({ total: 10 })
+// }, 400)
 
 const parent = document.querySelector(".confeti");
 parent.addEventListener("touchstart", () => { }, false);

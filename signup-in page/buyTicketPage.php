@@ -79,7 +79,7 @@ if (isset($_SESSION["login"])) {
         }
 
         if (count($rows) == 0) {
-            header("Location:upcomingdetail.php?movie_id=$movie_id");
+            header("Location:moviedetail.php?movie_id=$movie_id");
         }
 
         $theatre = [];
@@ -314,13 +314,13 @@ if (isset($_SESSION["login"])) {
             <div class="container-fluid bg-dark text-light p-3">
                 <div class="row">
                     <div class="col">
-                        <h5 class="p-2">PCinemaU</h5>
-                        <p class="p-2">PCinemaU adalah sebuah website yang menyediakan informasi film-film terkini dan terupdate</p>
+                        <h5 class="ps-3">PCinemaU</h5>
+                        <p class="p-2 ps-3">PCinemaU adalah sebuah website yang menyediakan informasi film-film terkini dan terupdate</p>
                     </div>
                     <div class="col">
                         <h5>Navigation</h5>
                         <ul class="list-unstyled">
-                            <li><a href="#">Home</a></li>
+                            <li><a href="index.php">Home</a></li>
                             <li><a href="index.php#nowplaying">Now Playing</a></li>
                             <li><a href="index.php#upcoming">Upcoming</a></li>
                             <li><a href="index.php#theatre">Theatre</a></li>
@@ -346,6 +346,9 @@ if (isset($_SESSION["login"])) {
                 </div>
             </div>
         </footer>
+
+    </div>
+
     </div>
 
     <div class="modal  fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

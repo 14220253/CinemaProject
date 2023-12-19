@@ -187,7 +187,7 @@ $nowPlaying = query("SELECT * FROM movie");
 
     <div class="content">
 
-        <div style="position: fixed; top:0px; right:50%">
+        <div style="position: fixed; top:-20px; right:50%">
             <div class=" confeti pumping" style="position: absolute; z-index: 90;
                                         right:50%;
                                         top:20px;
@@ -356,7 +356,14 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
                                         <a href="changepassword-page.php" class=" w-100 btn btn-dark change">Change Password</a>
 
                                     </div>
+                                   
                                 </div>
+                                <div class="row pt-2">
+                                        <div class="col-12">
+                                        <a href="ticket-page.php" class="btn btn-primary w-100">Your Ticket</a>
+                                        </div>
+                                        
+                                    </div>
 
                             </div>
 
@@ -393,26 +400,26 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
                                             <button class="btn btn-dark fav-movie confeti pumping" style="position: absolute;z-index: 90;
                                         top: 10px;
                                         right: 10px;
-                                        cursor: pointer;"><i class="bi bi-star-fill text-danger"></i>
+                                        cursor: pointer;"><i class="bi bi-star-fill text-warning"></i>
                                             </button>
                                         <?php else : ?>
 
                                             <button class="btn btn-dark fav-movie confeti pumping" style="position: absolute;z-index: 90;
                                         top: 10px;
                                         right: 10px;
-                                        cursor: pointer;"><i class="bi bi-star-fill text-warning"></i>
+                                        cursor: pointer;"><i class="bi bi-star-fill text-secondary"></i>
                                             </button>
                                         <?php endif; ?>
                                     <?php endif; ?>
 
                                     <div class="image-container">
 
-                                        <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
+                                        <a href="moviedetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
                                             <img class="card-img-top" style="object-fit: cover ;" src="data:image;base64,<?php getMovie($movie["movie_id"]) ?>" alt="<?= $movie["movie_name"] ?>">
                                         </a>
                                     </div>
 
-                                    <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
+                                    <a href="moviedetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
 
                                         <div class="card-body">
 
@@ -456,24 +463,24 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
                                     <button class="btn btn-dark fav-movie confeti pumping" style="position: absolute;z-index: 90;
                                         top: 10px;
                                         right: 10px;
-                                        cursor: pointer;"><i class="bi bi-star-fill text-danger"></i>
+                                        cursor: pointer;"><i class="bi bi-star-fill text-warning"></i>
                                     </button>
                                 <?php else : ?>
 
                                     <button class="btn btn-dark fav-movie confeti pumping" style="position: absolute;z-index: 90;
                                         top: 10px;
                                         right: 10px;
-                                        cursor: pointer;"><i class="bi bi-star-fill text-warning"></i>
+                                        cursor: pointer;"><i class="bi bi-star-fill text-secondary"></i>
                                     </button>
                                 <?php endif; ?>
                             <?php endif; ?>
-                                <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
+                                <a href="moviedetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
                                     <div class="image-container">
                                         <img class="card-img-top" style="object-fit: cover ;" src="data:image;base64,<?php getMovie($movie["movie_id"]) ?>" alt="<?= $movie["movie_name"] ?>">
 
                                     </div>
                                 </a>
-                                <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
+                                <a href="moviedetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
 
                                     <div class="card-body">
 
@@ -534,16 +541,16 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
             <div class="container-fluid bg-dark text-light p-3">
                 <div class="row">
                     <div class="col">
-                        <h5 class="p-2">PCinemaU</h5>
-                        <p class="p-2">PCinemaU adalah sebuah website yang menyediakan informasi film-film terkini dan terupdate</p>
+                        <h5 class="ps-3">PCinemaU</h5>
+                        <p class="p-2 ps-3">PCinemaU adalah sebuah website yang menyediakan informasi film-film terkini dan terupdate</p>
                     </div>
                     <div class="col">
                         <h5>Navigation</h5>
                         <ul class="list-unstyled">
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#nowplaying">Now Playing</a></li>
-                            <li><a href="#upcoming">Upcoming</a></li>
-                            <li><a href="#">Theatre</a></li>
+                            <li><a href="index.php">Home</a></li>
+                            <li><a href="index.php#nowplaying">Now Playing</a></li>
+                            <li><a href="index.php#upcoming">Upcoming</a></li>
+                            <li><a href="index.php#theatre">Theatre</a></li>
                         </ul>
                     </div>
                     <div class="col">
@@ -704,11 +711,11 @@ background: radial-gradient(circle, rgba(251,246,63,1) 0%, rgba(252,70,107,1) 10
                         success: function(data) {
                             console.log(data);
                             if (data == "insert") {
-                                $this.find("i").removeClass("text-warning");
-                                $this.find("i").addClass("text-danger");
-                            } else if (data == "delete") {
-                                $this.find("i").removeClass("text-danger");
+                                $this.find("i").removeClass("text-secondary");
                                 $this.find("i").addClass("text-warning");
+                            } else if (data == "delete") {
+                                $this.find("i").removeClass("text-warning");
+                                $this.find("i").addClass("text-secondary");
 
                             }
                         }

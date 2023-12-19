@@ -435,7 +435,7 @@ if (isset($_GET["movie_id"])) {
             </div>
             <div class="container-fluid  text-light" style="overflow-x: auto;">
                 <table class="ajax-table table-hover table table-dark table-stripped table-responsive mx-0">
-
+                    
                 </table>
 
             </div>
@@ -447,13 +447,13 @@ if (isset($_GET["movie_id"])) {
             <div class="container-fluid bg-dark text-light p-3">
                 <div class="row">
                     <div class="col">
-                        <h5 class="p-2">PCinemaU</h5>
-                        <p class="p-2">PCinemaU adalah sebuah website yang menyediakan informasi film-film terkini dan terupdate</p>
+                        <h5 class="ps-3">PCinemaU</h5>
+                        <p class="p-2 ps-3">PCinemaU adalah sebuah website yang menyediakan informasi film-film terkini dan terupdate</p>
                     </div>
                     <div class="col">
                         <h5>Navigation</h5>
                         <ul class="list-unstyled">
-                            <li><a href="#">Home</a></li>
+                            <li><a href="index.php">Home</a></li>
                             <li><a href="index.php#nowplaying">Now Playing</a></li>
                             <li><a href="index.php#upcoming">Upcoming</a></li>
                             <li><a href="index.php#theatre">Theatre</a></li>
@@ -479,6 +479,9 @@ if (isset($_GET["movie_id"])) {
                 </div>
             </div>
         </footer>
+
+    </div>
+
     </div>
 
     <!-- AOS -->

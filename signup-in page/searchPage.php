@@ -244,7 +244,7 @@ if ($_GET["genre"] == "All") {
                             <!-- <div class="card">
                     <div ></div> -->
                             <div class="card movie-card w-75 m-auto">
-                                <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
+                                <a href="moviedetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
                                     <div class="image-container" style="">
                                         <img class="card-img-top" style="object-fit: cover ;" src="data:image;base64,<?php getMovie($movie["movie_id"]) ?>" alt="<?= $movie["movie_name"] ?>">
 
@@ -252,12 +252,11 @@ if ($_GET["genre"] == "All") {
                                 </a>
 
 
-
                             </div>
 
                         </div>
                         <div class="col">
-                            <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-light">
+                            <a href="moviedetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-light">
 
                                 <h4 class="pt-2 text-center text-md-start text-lg-start text-sm-center text-uppercase pb-2 text-warning movie-title"><b><?= $movie["movie_name"] ?></b></h4>
                                 <p class="h6 pb-2 card-title text-center text-md-start text-lg-start text-sm-center"><?= $movie["genre"] ?></p>
@@ -286,16 +285,16 @@ if ($_GET["genre"] == "All") {
             <div class="container-fluid bg-dark text-light p-3">
                 <div class="row">
                     <div class="col">
-                        <h5 class="p-2">PCinemaU</h5>
-                        <p class="p-2">PCinemaU adalah sebuah website yang menyediakan informasi film-film terkini dan terupdate</p>
+                        <h5 class="ps-3">PCinemaU</h5>
+                        <p class="p-2 ps-3">PCinemaU adalah sebuah website yang menyediakan informasi film-film terkini dan terupdate</p>
                     </div>
                     <div class="col">
                         <h5>Navigation</h5>
                         <ul class="list-unstyled">
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#nowplaying">Now Playing</a></li>
-                            <li><a href="#upcoming">Upcoming</a></li>
-                            <li><a href="#">Theatre</a></li>
+                            <li><a href="index.php">Home</a></li>
+                            <li><a href="index.php#nowplaying">Now Playing</a></li>
+                            <li><a href="index.php#upcoming">Upcoming</a></li>
+                            <li><a href="index.php#theatre">Theatre</a></li>
                         </ul>
                     </div>
                     <div class="col">
@@ -318,6 +317,9 @@ if ($_GET["genre"] == "All") {
                 </div>
             </div>
         </footer>
+
+    </div>
+
 
     </div>
 

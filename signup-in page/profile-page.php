@@ -18,7 +18,8 @@ if (isset($_SESSION["login"])) {
 }
 
 $user_id = getUserID($data);
-$sql = "SELECT * FROM tiket t join movie m ON (t.fk_movie_id = m.movie_id) JOIN schedule_hours sh ON (sh.schedule_hours_id = t.fk_schedule_hours_id) WHERE fk_customer_id = $user_id";
+
+$sql = "SELECT * FROM tiket t join movie m ON (t.fk_movie_id = m.movie_id) JOIN schedule_hours sh ON (sh.schedule_hours_id = t.fk_schedule_hours_id) WHERE fk_customer_id = $user_id ORDER BY tiket_id DESC";
 $historys = query($sql);
 
 
@@ -221,6 +222,7 @@ $historys = query($sql);
                     <thead>
                         <th>Order ID</th>
                         <th>Movie</th>
+                        <th>Theatre</th>
                         <th>Seat</th>
                         <th>Date</th>
                         <th>Time</th>
@@ -232,6 +234,7 @@ $historys = query($sql);
                             <tr>
                                 <td><?php echo $history["tiket_id"] ?></td>
                                 <td><?php echo $history["movie_name"] ?></td>
+                                <td></td>
                                 <td><?php echo $history["fk_kursi_id"] ?></td>
                                 <td><?php echo $history["date"] ?></td>
                                 <td><?php echo $history["jam_penayangan"] ?></td>
@@ -255,16 +258,16 @@ $historys = query($sql);
             <div class="container-fluid bg-dark text-light p-3">
                 <div class="row">
                     <div class="col">
-                        <h5 class="p-2">PCinemaU</h5>
-                        <p class="p-2">PCinemaU adalah sebuah website yang menyediakan informasi film-film terkini dan terupdate</p>
+                        <h5 class="ps-3">PCinemaU</h5>
+                        <p class="p-2 ps-3">PCinemaU adalah sebuah website yang menyediakan informasi film-film terkini dan terupdate</p>
                     </div>
                     <div class="col">
                         <h5>Navigation</h5>
                         <ul class="list-unstyled">
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#nowplaying">Now Playing</a></li>
-                            <li><a href="#upcoming">Upcoming</a></li>
-                            <li><a href="#">Theatre</a></li>
+                            <li><a href="index.php">Home</a></li>
+                            <li><a href="index.php#nowplaying">Now Playing</a></li>
+                            <li><a href="index.php#upcoming">Upcoming</a></li>
+                            <li><a href="index.php#theatre">Theatre</a></li>
                         </ul>
                     </div>
                     <div class="col">
@@ -287,6 +290,9 @@ $historys = query($sql);
                 </div>
             </div>
         </footer>
+
+    </div>
+
 
     </div>
     </div>

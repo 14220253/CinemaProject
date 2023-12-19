@@ -183,16 +183,16 @@ $favMovies = query($sql);
                 </div>
             </div>
         </nav>
-        <div class="container w-75 text-light" style="min-height: 400px;">
+        <div class="container w-75 text-light" style="min-height: 500px;">
             <h1 class="text-center text-uppercase border-2 border-bottom p-4">My Favorite Movie</h1>
 
-            <table class="table table-striped table-hover table-warning">
+            <table class="table table-striped table-hover table-warning" style="min-height: 250px;">
                 <thead class="table-dark">
                     <tr>
                         <th>Movie</th>
                         <th>Info</th>
                         <th>Sinopsis</th>
-                        <th>Action</th>
+                        <!-- <th>Action</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -202,7 +202,7 @@ $favMovies = query($sql);
                             <td class="" style="width: 15%;">
                                 <div class="image-container">
 
-                                    <a href="upcomingdetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
+                                    <a href="moviedetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
                                         <img class="card-img-top" style="object-fit: cover ;" src="data:image;base64,<?php getMovie($movie["movie_id"]) ?>" alt="<?= $movie["movie_name"] ?>">
                                     </a>
                                 </div>
@@ -210,6 +210,9 @@ $favMovies = query($sql);
                             <td>
                                 <h6 class="text-uppercase text-primary" style="font-weight: bold;"><?= $movie["movie_name"] ?></h6>
                                 <p><?= $movie["genre"] ?></p>
+                                <p class="mov-id" style="display: none;"><?=$movie["movie_id"]?></p>    
+                            <button class="w-100 mt-3 confeti fav-movie btn btn-dark confeti">Delete</button>
+
                             </td>
                             <td>
                                 <div style="overflow-y: auto; height: 200px;">
@@ -238,14 +241,13 @@ $favMovies = query($sql);
 
                             </td>
 
-                            <td>
-                            <p style="display: none;"><?=$movie["movie_id"]?></p>    
-                            <button class="confeti fav-movie btn btn-dark confeti">Delete</button></td>
+                            <!-- <td>
+                            </td> -->
                         </tr>
                     <?php endforeach; ?>
                     <?php else:?>
-                        <tr>
-                            <td colspan="4" class="text-center h3">No Favorite Movie</td>
+                        <tr >
+                            <td colspan="3" class="text-center display-4 text-uppercase text-danger pt-5" style="font-weight: bold;">No Favorite Movie</td>
                         </tr>
                     <?php endif;?>
                 </tbody>
@@ -256,16 +258,16 @@ $favMovies = query($sql);
             <div class="container-fluid bg-dark text-light p-3">
                 <div class="row">
                     <div class="col">
-                        <h5 class="p-2">PCinemaU</h5>
-                        <p class="p-2">PCinemaU adalah sebuah website yang menyediakan informasi film-film terkini dan terupdate</p>
+                        <h5 class="ps-3">PCinemaU</h5>
+                        <p class="p-2 ps-3">PCinemaU adalah sebuah website yang menyediakan informasi film-film terkini dan terupdate</p>
                     </div>
                     <div class="col">
                         <h5>Navigation</h5>
                         <ul class="list-unstyled">
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#nowplaying">Now Playing</a></li>
-                            <li><a href="#upcoming">Upcoming</a></li>
-                            <li><a href="#">Theatre</a></li>
+                            <li><a href="index.php">Home</a></li>
+                            <li><a href="index.php#nowplaying">Now Playing</a></li>
+                            <li><a href="index.php#upcoming">Upcoming</a></li>
+                            <li><a href="index.php#theatre">Theatre</a></li>
                         </ul>
                     </div>
                     <div class="col">
@@ -289,6 +291,7 @@ $favMovies = query($sql);
             </div>
         </footer>
 
+    </div>
 
 
     </div>
@@ -332,7 +335,7 @@ $favMovies = query($sql);
                     $this.css('animation', '');
                 });
 
-                m_id = $this.siblings("p").text();
+                m_id = $this.siblings(".mov-id").text();
                 u_id = <?= getUserID($data) ?>;
                 $.ajax({
                     url: "favProcess.php",
