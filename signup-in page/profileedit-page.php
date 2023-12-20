@@ -195,10 +195,6 @@ if (isset($_SESSION["login"])) {
 
           </div>
           <div class="inputBox">
-            <input type="text" id="username" name="username" placeholder ="username" value=<?php echo htmlspecialchars($user["username"]) ?> required value="<?php echo htmlspecialchars($form_data["username"] ?? '') ?>">
-
-          </div>
-          <div class="inputBox">
             <input id="password" type="password" name="password" placeholder ="password" required value="<?php echo htmlspecialchars($form_data["password"] ?? '') ?>">
             
           </div>
