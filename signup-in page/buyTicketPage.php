@@ -279,7 +279,7 @@ if (isset($_SESSION["login"])) {
                             <?php while ($current_date <= $end_date) : ?>
                                 <tr>
                                     <td>
-                                        <h6 class="ps-2 dateFilm"><?= $current_date->format('Y-m-d') ?></h6>
+                                        <h6 class="ps-2 dateFilm"><?= $current_date->format('d-m-Y') ?></h6>
 
                                         <div class="row">
                                             <div class="col-10">
@@ -406,13 +406,15 @@ if (isset($_SESSION["login"])) {
 
                 let theatre = $(this).closest("tbody").prev("thead").find(".theatre").text();
                 let tanggal = $(this).closest("td").find(".dateFilm").text();
+                let dateParts = tanggal.split("-");
+                let formattedTanggal = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
                 console.log(theatre);
                 console.log(tanggal);
                 console.log($(".data_movie").val());
                 //show modal
                 $("#exampleModal").find(".data_theatre").val(theatre);
                 $("#exampleModal").find(".data_time").val(time);
-                $("#exampleModal").find(".data_date").val(tanggal);
+                $("#exampleModal").find(".data_date").val(formattedTanggal);
 
                 $("#exampleModal").modal("show");
             })

@@ -19,7 +19,7 @@ if (isset($_SESSION["login"])) {
 
 $user_id = getUserID($data);
 
-$sql = "SELECT * FROM tiket t join movie m ON (t.fk_movie_id = m.movie_id) JOIN schedule_hours sh ON (sh.schedule_hours_id = t.fk_schedule_hours_id) WHERE fk_customer_id = $user_id ORDER BY tiket_id DESC";
+$sql = "SELECT * FROM tiket t join movie m ON (t.fk_movie_id = m.movie_id) JOIN schedule_hours sh ON (sh.schedule_hours_id = t.fk_schedule_hours_id) JOIN detail_penayangan dp ON (dp.detail_penayangan_id = sh.fk_detail_penayangan_id) JOIN data_theatre dt ON (dt.theatre_id = dp.fk_theatre_id) WHERE fk_customer_id = $user_id ORDER BY tiket_id DESC;";
 $historys = query($sql);
 
 
@@ -52,6 +52,12 @@ $historys = query($sql);
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Vina+Sans&display=swap" rel="stylesheet" />
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- sweetalert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <style>
         div.content {
@@ -86,8 +92,6 @@ $historys = query($sql);
             filter: blur(5px);
             opacity: 0.8;
         }
-
-        
     </style>
     <script src="../Partials/autoHoverBG.js"></script>
     <link rel="stylesheet" href="../Partials/general.css" />
@@ -130,10 +134,10 @@ $historys = query($sql);
                                     <li><a class="dropdown-item" href="../signup-in page/signup-page.php">Sign Up</a></li>
                                 <?php endif; ?>
 
-                            
+
                             </ul>
                         </li>
-                        
+
                     </ul>
                     <form class="d-flex" method="get" action="searchPage.php">
                         <select class="form-select w-75 me-2" name="genre">
@@ -203,11 +207,11 @@ $historys = query($sql);
 
                 </div>
                 <div class="col">
-                <!-- <h3 class="card-title text-uppercase text-light text-center"><b>Action</b></h3> -->
+                    <!-- <h3 class="card-title text-uppercase text-light text-center"><b>Action</b></h3> -->
                     <div class="stats p-1">
                         <a href="profileedit-page.php" class="my-2 w-100 btn btn-outline-info edit"><b>Edit Profile</b></a>
-                        <a href="changepassword-page.php" class="my-2 w-100 btn btn-outline-warning change"><b>Change Password</b></a> 
-                        <a href="deleteaccount-page.php" class="my-2 w-100 btn btn-outline-danger delete"><b>Delete Account</b></a>
+                        <a href="changepassword-page.php" class="my-2 w-100 btn btn-outline-danger change"><b>Change Password</b></a>
+                        <a href="ticket-page.php" class="my-2 w-100 btn btn-outline-warning"><b>Your Ticket</b></a>
                         <a class="btn btn-outline-success w-100 my-2" href="index.php"><b>Back</b></a>
                     </div>
                 </div>
@@ -218,34 +222,34 @@ $historys = query($sql);
             </div>
             <hr class="border-5 bg-light shadow-lg">
             <div class="row" style="overflow-y: auto; height: 400px;">
-                <table class="table table-dark table-striped" >
+                <table class="table table-dark table-striped">
                     <thead>
-                        <th>Order ID</th>
+                        <th>Order Time</th>
                         <th>Movie</th>
                         <th>Theatre</th>
                         <th>Seat</th>
                         <th>Date</th>
                         <th>Time</th>
-                        <th>Price</th>       
+                        <th>Price</th>
                     </thead>
-                    <tbody >
-                        <?php if(count($historys)):?>
-                        <?php foreach ($historys as $history) : ?>
+                    <tbody>
+                        <?php if (count($historys)) : ?>
+                            <?php foreach ($historys as $history) : ?>
+                                <tr>
+                                    <td><?php echo (new DateTime($history["timestamp"]))->format('d-m-Y H:i:s'); ?></td>
+                                    <td><?php echo $history["movie_name"] ?></td>
+                                    <td><?php echo $history["theatre_name"] ?></td>
+                                    <td><?php echo $history["fk_kursi_id"] ?></td>
+                                    <td><?php echo (new DateTime($history["date"]))->format('d-m-Y'); ?></td>
+                                    <td><?php echo $history["jam_penayangan"] ?></td>
+                                    <td><?php echo $history["price"] ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else : ?>
                             <tr>
-                                <td><?php echo $history["tiket_id"] ?></td>
-                                <td><?php echo $history["movie_name"] ?></td>
-                                <td></td>
-                                <td><?php echo $history["fk_kursi_id"] ?></td>
-                                <td><?php echo $history["date"] ?></td>
-                                <td><?php echo $history["jam_penayangan"] ?></td>
-                                <td><?php echo $history["price"] ?></td>
+                                <td colspan="7" class="text-center text-danger h1" >No History</td>
                             </tr>
-                        <?php endforeach; ?>
-                        <?php else:?>
-                            <tr>
-                                <td colspan="6" class="text-center text-danger h1">No History</td>
-                            </tr>
-                        <?php endif;?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
@@ -294,8 +298,13 @@ $historys = query($sql);
     </div>
 
 
-    </div>
-    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>    
+    <script>
+        // console.log("Initializing AOS...");
+        AOS.init();
+    </script>
+
 </body>
 
 </html>

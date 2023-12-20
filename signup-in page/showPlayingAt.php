@@ -72,7 +72,7 @@ if (isset($_GET['id']) and $_GET['theatre_id']) {
                         $checkDate = clone $start_date;
                         while ($current_date <= $end_date) {
                             echo "<tr>
-                    <th class='w-25'><p class='m-2 dateFilm'>" . $current_date->format('Y-m-d') . "</p></th> 
+                    <th class='w-25'><p class='m-2 dateFilm'>" . $current_date->format('d-m-Y') . "</p></th> 
                     <td>";
                             foreach ($rows as $row) {
                                 if ($row["theatre_name"] == $t && new DateTime($row["start_date"]) == $checkDate) {

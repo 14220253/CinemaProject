@@ -48,6 +48,8 @@ if (isset($_POST['submit']) && isset($_POST['select_ticket'])) {
         $rows[] = $row;
     }
     $theatre_id = $rows[0]["fk_theatre_id"];
+    $movie_id = $rows[0]["movie_id"];
+    $detail_penayangan_id = $rows[0]["detail_penayangan_id"];
 
     $harga = $rows[0]["harga_tiket"];
     // $date = $rows[0]["start_date"];
@@ -74,52 +76,61 @@ if ($conn->connect_error) {
     die("Connection failed: " . $mysqli->connect_error);
 }
 
-function getSeatStatus($seatId ,$conn)
+
+function isSeatTaken($seatId, $conn)
 {
     global $theatre_id;
-    global $diagram_kursi;
-    $sql = "SELECT status FROM seat WHERE fusion_id = '$theatre_id-$diagram_kursi-$seatId'";
-    var_dump($theatre_id."-".$diagram_kursi ."-".$seatId);
-    
+    global $detail_penayangan_id;
+    global $date;
+    global $time;
+
+    $sql = "SELECT *
+            FROM detail_penayangan dp
+            JOIN schedule_hours sh ON (sh.fk_detail_penayangan_id = dp.detail_penayangan_id) 
+            JOIN tiket t ON (t.fk_schedule_hours_id = sh.schedule_hours_id) 
+            WHERE detail_penayangan_id = $detail_penayangan_id 
+            AND fk_theatre_id = $theatre_id AND date = '$date' 
+            AND jam_penayangan = '$time' AND fk_kursi_id = '$seatId'";
+
+    // var_dump($theatre_id . "-" . $diagram_kursi . "-" . $seatId);
+
     $result = $conn->query($sql);
 
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        return $row['status'];
-    }
-
-    return 0;
+    return $result->num_rows > 0;
 }
+
+
+
 $seatStatus = array(
-    'A1' => getSeatStatus('A1', $conn),
-    'A2' => getSeatStatus('A2', $conn),
-    'A3' => getSeatStatus('A3', $conn),
-    'A4' => getSeatStatus('A4', $conn),
-    'A5' => getSeatStatus('A5', $conn),
-    'A6' => getSeatStatus('A6', $conn),
-    'A7' => getSeatStatus('A7', $conn),
-    'B1' => getSeatStatus('B1', $conn),
-    'B2' => getSeatStatus('B2', $conn),
-    'B3' => getSeatStatus('B3', $conn),
-    'B4' => getSeatStatus('B4', $conn),
-    'B5' => getSeatStatus('B5', $conn),
-    'B6' => getSeatStatus('B6', $conn),
-    'B7' => getSeatStatus('B7', $conn),
-    'C1' => getSeatStatus('C1', $conn),
-    'C2' => getSeatStatus('C2', $conn),
-    'C3' => getSeatStatus('C3', $conn),
-    'C4' => getSeatStatus('C4', $conn),
-    'C5' => getSeatStatus('C5', $conn),
-    'C6' => getSeatStatus('C6', $conn),
-    'C7' => getSeatStatus('C7', $conn),
-    'D1' => getSeatStatus('D1', $conn),
-    'D2' => getSeatStatus('D2', $conn),
-    'D3' => getSeatStatus('D3', $conn),
-    'D4' => getSeatStatus('D4', $conn),
-    'D5' => getSeatStatus('D5', $conn),
-    'D6' => getSeatStatus('D6', $conn),
-    'D7' => getSeatStatus('D7', $conn),
-    'D8' => getSeatStatus('D8', $conn),
+    'A1' => isSeatTaken('A1', $conn),
+    'A2' => isSeatTaken('A2', $conn),
+    'A3' => isSeatTaken('A3', $conn),
+    'A4' => isSeatTaken('A4', $conn),
+    'A5' => isSeatTaken('A5', $conn),
+    'A6' => isSeatTaken('A6', $conn),
+    'A7' => isSeatTaken('A7', $conn),
+    'B1' => isSeatTaken('B1', $conn),
+    'B2' => isSeatTaken('B2', $conn),
+    'B3' => isSeatTaken('B3', $conn),
+    'B4' => isSeatTaken('B4', $conn),
+    'B5' => isSeatTaken('B5', $conn),
+    'B6' => isSeatTaken('B6', $conn),
+    'B7' => isSeatTaken('B7', $conn),
+    'C1' => isSeatTaken('C1', $conn),
+    'C2' => isSeatTaken('C2', $conn),
+    'C3' => isSeatTaken('C3', $conn),
+    'C4' => isSeatTaken('C4', $conn),
+    'C5' => isSeatTaken('C5', $conn),
+    'C6' => isSeatTaken('C6', $conn),
+    'C7' => isSeatTaken('C7', $conn),
+    'D1' => isSeatTaken('D1', $conn),
+    'D2' => isSeatTaken('D2', $conn),
+    'D3' => isSeatTaken('D3', $conn),
+    'D4' => isSeatTaken('D4', $conn),
+    'D5' => isSeatTaken('D5', $conn),
+    'D6' => isSeatTaken('D6', $conn),
+    'D7' => isSeatTaken('D7', $conn),
+    'D8' => isSeatTaken('D8', $conn),
 );
 
 
@@ -152,7 +163,8 @@ $seatStatus = array(
             $(".jumlahTiket").html(ticketCount);
             $("#maxTicket").html(maxTicket)
             $(".title").html(movieTitle);
-            $(".tanggalTayang").html(movieDate.getMonth() + 1 + "-" + movieDate.getDate() + "-" + movieDate.getFullYear());
+            $(".tanggalTayang").html(("0" + movieDate.getDate()).slice(-2) + "-" + ("0" + (movieDate.getMonth() + 1)).slice(-2) + "-" + movieDate.getFullYear());
+            // $(".tanggalTayang").html(movieDate.getDate() + "-" + movieDate.getMonth() + 1 + "-" + movieDate.getFullYear());
             for (let i = 0; i < data.length; i++) {
                 data[i].addEventListener('click', function() {
                     if ($(data[i]).hasClass("disabled-seat")) {

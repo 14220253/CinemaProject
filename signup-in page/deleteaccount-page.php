@@ -1,4 +1,7 @@
 <?php
+
+header("Location: index.php");
+
 session_start();
 require __DIR__ . "/database.php";
 $guessUser = false;

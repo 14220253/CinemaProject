@@ -53,14 +53,18 @@ if (empty($errors)) {
     try {
         if ($mysqli->query($sql)) {
             session_destroy();
-            header("Location: /profile-page.php");
+            header("Location: profile-page.php");
             // Rest of your code
         } else {
             die($mysqli->error . " " . $mysqli->errno);
         }
     } catch (Exception $e) {
-        die("SQL error: " . $mysqli->error);
-        header("Location: /profile-page.php");
+        if ($mysqli->errno === 1062)
+            $errors["username"] = "username already taken";
+        else
+            die ($mysqli->error." ".$mysqli->errno);
+        // die("SQL error: " . $mysqli->error);
+        header("Location: profile-page.php");
     }
 
 

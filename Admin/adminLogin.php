@@ -52,6 +52,7 @@ if (isset($_SESSION['user'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -62,8 +63,8 @@ if (isset($_SESSION['user'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap">
     <script>
-        $(document).ready(function(){
-            $('#toggleEyeButton').click(function(){
+        $(document).ready(function() {
+            $('#toggleEyeButton').click(function() {
                 if ($('#passwordField').attr('type') === 'password') {
                     $('#passwordField').attr('type', 'text');
                     $('#togglePassword').removeClass('bi-eye-slash');
@@ -74,65 +75,108 @@ if (isset($_SESSION['user'])) {
                     $('#togglePassword').addClass('bi-eye-slash');
                 }
             });
-            
+
         });
     </script>
     <style>
         body {
             font-family: 'Roboto Mono', monospace;
         }
+
         body {
             background-size: 60px 60px;
-            background-color:rgb(14, 13, 13);
-            background-image: 
-            linear-gradient(to right, rgb(231, 179, 46) 2px, transparent 2px), 
-            linear-gradient(to bottom, rgb(231, 179, 46) 2px, transparent 2px);
+            background-color: rgb(14, 13, 13);
+            background-image:
+                linear-gradient(to right, rgb(231, 179, 46) 2px, transparent 2px),
+                linear-gradient(to bottom, rgb(231, 179, 46) 2px, transparent 2px);
             animation: backgroundAnimation 2s infinite linear;
         }
+
         @keyframes backgroundAnimation {
-        0% {
-            background-position: 0 0;
+            0% {
+                background-position: 0 0;
+            }
+
+            100% {
+                background-position: 60px 60px;
+            }
         }
-        100% {
-            background-position: 60px 60px;
+        div.content {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            z-index: 10;
         }
-}
+
+        div.content-inner {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+
+
+        }
+
+        div.bg-mid {
+            position: fixed;
+            width: 100vw;
+            min-height: 100vh;
+            z-index: 8;
+            background-color: #181818;
+            filter: blur(5px);
+            opacity: 0.8;
+
+        }
 
     </style>
+    <script src="../Partials/autoHoverBG.js"></script>
+    <link rel="stylesheet" href="../Partials/general.css">
 </head>
-<body>
-    <div class="d-flex align-content-center justify-content-center" style="padding-top: 50px;">
-        <div class="card bg-dark text-center text-warning">
-            <div class="card-content">
-                <div class="card-header opacity">
-                    <div class="card-title">
-                        <h1><strong>ADMIN LOGIN.</strong></h1>
+
+<body style="overflow-x: hidden;">
+
+    <section>
+
+    </section>
+    <div class="bg-mid">
+    </div>
+
+    <div class="content">
+        <div class="d-flex align-content-center justify-content-center p-5 flex-wrap" style="height: 100vh;">
+            <div class="card bg-dark text-center text-warning">
+                <div class="card-content">
+                    <div class="card-header opacity">
+                        <div class="card-title">
+                            <h1><strong>ADMIN LOGIN.</strong></h1>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="usernameIcon"><strong style="font-size:18px;">@</strong></span>
+                                <input name="NIP" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="usernameIcon">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="passwordIcon"><i class="bi bi-lock-fill"></i></span>
+                                <input name="password" id="passwordField" type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="passwordIcon">
+                            </div>
+                            <div>
+                                <p>Forgot Password ?</p>
+                                <p>Contact your supervisor</p>
+                            </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-dark text-warning border border-warning" type="submit" name='submit'>LOG IN</button>
+                        </form>
                     </div>
                 </div>
-                <div class="card-body">
-                    <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])?>">
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="usernameIcon"><strong style="font-size:18px;">@</strong></span>
-                        <input name ="NIP" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="usernameIcon">
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="passwordIcon"><i class="bi bi-lock-fill"></i></span>
-                        <input name = "password" id="passwordField" type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="passwordIcon">
-                    </div>
-                    <div>
-                        <p>Forgot Password ?</p>
-                        <p>Contact your supervisor</p>
-                    </div>
-                  </div>
-                <div class="card-footer">
-                    <button class="btn btn-dark text-warning border border-warning" type="submit" name='submit'>LOG IN</button>
-                    </form>
-                </div> 
             </div>
+        </div>
+
     </div>
-</div>
 
 
-    
+
+
 </body>
+
 </html>

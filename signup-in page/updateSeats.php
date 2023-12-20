@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $price = $_POST["price"];
     $ticketCount = $_POST["ticketCount"];
     $input_date = $_POST["date"];
-    $date_obj = DateTime::createFromFormat('m-d-Y', $input_date);
+    $date_obj = DateTime::createFromFormat('d-m-Y', $input_date);
     $date = $date_obj->format('Y-m-d');
 
     $time = $_POST["time"];
@@ -46,23 +46,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
+    $timestamp = date('Y-m-d H:i:s');
 
 
+    // foreach ($selectedSeats as $seat) {
 
+    //     $stmt2 = $conn->prepare("INSERT INTO tiket (fk_schedule_hours_id, fk_kursi_id, fk_customer_id, price, fk_movie_id, date) VALUES ( ?, ?, ?, ?, ?, ?)");
+
+    //     if (!$stmt2) {
+    //         echo 0;
+    //         exit();
+    //     }
+
+    //     if (!$stmt2->bind_param("isiiis", $schedule_id, $seat, $user_id, $price, $movie_id, $date)) {
+    //         echo 0;
+    //         exit();
+    //     }
+
+    //     if (!$stmt2->execute()) {
+    //         echo 0;
+    //         exit();
+    //     }
+    // }
     foreach ($selectedSeats as $seat) {
-
-        $stmt2 = $conn->prepare("INSERT INTO tiket (fk_schedule_hours_id, fk_kursi_id, fk_customer_id, price, fk_movie_id, date) VALUES ( ?, ?, ?, ?, ?, ?)");
-
+        $stmt2 = $conn->prepare("INSERT INTO tiket (fk_schedule_hours_id, fk_kursi_id, fk_customer_id, price, fk_movie_id, date, timestamp) VALUES ( ?, ?, ?, ?, ?, ?, ?)");
+    
         if (!$stmt2) {
             echo 0;
             exit();
         }
-
-        if (!$stmt2->bind_param("isiiis", $schedule_id, $seat, $user_id, $price, $movie_id, $date)) {
+    
+        if (!$stmt2->bind_param("isiiiss", $schedule_id, $seat, $user_id, $price, $movie_id, $date, $timestamp)) {
             echo 0;
             exit();
         }
-
+    
         if (!$stmt2->execute()) {
             echo 0;
             exit();

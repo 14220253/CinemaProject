@@ -83,6 +83,11 @@ $favMovies = query($sql);
         .image-container img {
             object-fit: cover;
         }
+
+        .label {
+            width: 90px;
+            font-weight: bold;
+        }
     </style>
     <script src="../Partials/autoHoverBG.js"></script>
     <link rel="stylesheet" href="../Partials/general.css">
@@ -106,7 +111,7 @@ $favMovies = query($sql);
     </div>
 
     <div class="content">
-    <div style="position: fixed; top:0px; right:50%">
+        <div style="position: fixed; top:0px; right:50%">
             <div class=" confeti pumping" style="position: absolute; z-index: 90;
                                         right:50%;
                                         top:20px;
@@ -183,76 +188,78 @@ $favMovies = query($sql);
                 </div>
             </div>
         </nav>
-        <div class="container w-75 text-light" style="min-height: 500px;">
+        <div class="container-fluid text-light" style="min-height: 500px; ">
             <h1 class="text-center text-uppercase border-2 border-bottom p-4">My Favorite Movie</h1>
-
-            <table class="table table-striped table-hover table-warning" style="min-height: 250px;">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Movie</th>
-                        <th>Info</th>
-                        <th>Sinopsis</th>
-                        <!-- <th>Action</th> -->
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if(count($favMovies)> 0):?>
-                    <?php foreach ($favMovies as $movie) : ?>
+            <div style="overflow-x: auto;">
+                <table class="table table-striped table-hover table-warning" style="min-width: 750px;">
+                    <thead class="table-dark">
                         <tr>
-                            <td class="" style="width: 15%;">
-                                <div class="image-container">
+                            <th>Movie</th>
+                            <th>Info</th>
+                            <th>Detail</th>
+                            <!-- <th>Action</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (count($favMovies) > 0) : ?>
+                            <?php foreach ($favMovies as $movie) : ?>
+                                <tr>
+                                    <td class="" style="min-width: 250px; max-width:25%">
+                                        <div class="image-container">
 
-                                    <a href="moviedetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
-                                        <img class="card-img-top" style="object-fit: cover ;" src="data:image;base64,<?php getMovie($movie["movie_id"]) ?>" alt="<?= $movie["movie_name"] ?>">
-                                    </a>
-                                </div>
-                            </td>
-                            <td>
-                                <h6 class="text-uppercase text-primary" style="font-weight: bold;"><?= $movie["movie_name"] ?></h6>
-                                <p><?= $movie["genre"] ?></p>
-                                <p class="mov-id" style="display: none;"><?=$movie["movie_id"]?></p>    
-                            <button class="w-100 mt-3 confeti fav-movie btn btn-dark confeti">Delete</button>
-
-                            </td>
-                            <td>
-                                <div style="overflow-y: auto; height: 200px;">
-                                    <? //= $movie["movie_details"] 
-                                    ?>
-                                    <div class="scrollable-div p-3">
-
-                                        <div class="row" data-aos="flip-right" data-aos-duration="2000">
-                                            <div class="col-1 label">Produser</div>
-                                            <div class="col-1" style="width: 3px;">:</div>
-                                            <div class="col"><?= $movie["produser"] ?></div>
+                                            <a href="moviedetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
+                                                <img class="card-img-top" style="object-fit: cover ;" src="data:image;base64,<?php getMovie($movie["movie_id"]) ?>" alt="<?= $movie["movie_name"] ?>">
+                                            </a>
                                         </div>
-                                        <div class="row" data-aos="flip-right" data-aos-duration="2000">
-                                            <div class="col-1 label">Sutradara</div>
-                                            <div class="col-1" style="width: 3px;">:</div>
-                                            <div class="col"><?= $movie["sutradara"] ?></div>
+                                    </td>
+                                    <td>
+                                        <h6 class="text-uppercase text-primary" style="font-weight: bold;"><?= $movie["movie_name"] ?></h6>
+                                        <p><?= $movie["genre"] ?></p>
+                                        <p class="mov-id" style="display: none;"><?= $movie["movie_id"] ?></p>
+                                        <button class="w-100 mt-3 confeti fav-movie btn btn-dark confeti">Delete</button>
+
+                                    </td>
+                                    <td>
+                                        <div>
+
+                                            <div class="scrollable-div p-3">
+
+                                                <div class="row" data-aos="flip-right" data-aos-duration="2000">
+                                                    <div class="col-1 label">Produser</div>
+                                                    <div class="col-1" style="width: 3px;">:</div>
+                                                    <div class="col"><?= $movie["produser"] ?></div>
+                                                </div>
+                                                <div class="row" data-aos="flip-right" data-aos-duration="2000">
+                                                    <div class="col-1 label">Sutradara</div>
+                                                    <div class="col-1" style="width: 3px;">:</div>
+                                                    <div class="col"><?= $movie["sutradara"] ?></div>
+                                                </div>
+                                                <div class="row" data-aos="flip-right" data-aos-duration="2000">
+                                                    <div class="col-1 label">Penulis</div>
+                                                    <div class="col-1" style="width: 3px;">:</div>
+                                                    <div class="col"><?= $movie["penulis"] ?></div>
+                                                </div>
+
+                                            </div>
                                         </div>
-                                        <div class="row" data-aos="flip-right" data-aos-duration="2000">
-                                            <div class="col-1 label">Penulis</div>
-                                            <div class="col-1" style="width: 3px;">:</div>
-                                            <div class="col"><?= $movie["penulis"] ?></div>
-                                        </div>
 
-                                    </div>
-                                </div>
+                                    </td>
 
-                            </td>
-
-                            <!-- <td>
+                                    <!-- <td>
                             </td> -->
-                        </tr>
-                    <?php endforeach; ?>
-                    <?php else:?>
-                        <tr >
-                            <td colspan="3" class="text-center display-4 text-uppercase text-danger pt-5" style="font-weight: bold;">No Favorite Movie</td>
-                        </tr>
-                    <?php endif;?>
-                </tbody>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else : ?>
+                            <tr>
+                                <td colspan="3" class="text-center display-4 text-uppercase text-danger pt-5" style="font-weight: bold;">No Favorite Movie</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
 
-            </table>
+                </table>
+            </div>
+
+
         </div>
         <footer data-aos="zoom-in">
             <div class="container-fluid bg-dark text-light p-3">

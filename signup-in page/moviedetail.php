@@ -295,10 +295,10 @@ if (isset($_GET["movie_id"])) {
                                     </li>
                                 <?php endif; ?>
 
-                                
+
                             </ul>
                         </li>
-                        
+
                     </ul>
                     <form class="d-flex" method="get" action="searchPage.php">
                         <select class="form-select w-75 me-2" name="genre">
@@ -435,7 +435,7 @@ if (isset($_GET["movie_id"])) {
             </div>
             <div class="container-fluid  text-light" style="overflow-x: auto;">
                 <table class="ajax-table table-hover table table-dark table-stripped table-responsive mx-0">
-                    
+
                 </table>
 
             </div>
@@ -564,11 +564,16 @@ if (isset($_GET["movie_id"])) {
 
                 let theatre = $(this).closest("table").closest("tr").find(".theatre").text();
                 let tanggal = $(this).closest("tr").find(".dateFilm").text();
-                // console.log(theatre);
+                let dateParts = tanggal.split("-");
+                let formattedTanggal = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+
+
+                // let tanggal = new Date($(this).closest("tr").find(".dateFilm").text());
+                // let formattedTanggal = tanggal.getFullYear() + '-' + String(tanggal.getMonth()+1).padStart(2, '0') + '-' + String(tanggal.getDate()).padStart(2, '0');                // console.log(theatre);
                 //show modal
                 $("#exampleModal").find(".data_theatre").val(theatre);
                 $("#exampleModal").find(".data_time").val(time);
-                $("#exampleModal").find(".data_date").val(tanggal);
+                $("#exampleModal").find(".data_date").val(formattedTanggal);
 
                 $("#exampleModal").modal("show");
             })

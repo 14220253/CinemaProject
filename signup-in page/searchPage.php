@@ -245,9 +245,8 @@ if ($_GET["genre"] == "All") {
                     <div ></div> -->
                             <div class="card movie-card w-75 m-auto">
                                 <a href="moviedetail.php?movie_id=<?= $movie["movie_id"] ?>" class="text-decoration-none text-dark">
-                                    <div class="image-container" style="">
+                                    <div class="image-container">
                                         <img class="card-img-top" style="object-fit: cover ;" src="data:image;base64,<?php getMovie($movie["movie_id"]) ?>" alt="<?= $movie["movie_name"] ?>">
-
                                     </div>
                                 </a>
 
